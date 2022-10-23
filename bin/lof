@@ -2,19 +2,33 @@
 # launch or focus app
 # $1=app name; $2=displayed class; $3=optional, window name
 
-ID=$(xdotool getactivewindow)
+TREE=$(swaymsg -t get_tree)
+
+while IFS='"' read -a line; do
+	case ${line[1]} in
+		class)
+			CLASS=${line[3]}
+			;;
+		app_id)
+			ID=${line[3]}
+			;;
+		title)
+			TITLE=${line[3]}
+			break
+			;;
+	esac
+done < <(echo "$TREE" | jq ".. | select(.type?) | select(.focused) | {app_id,window_properties}")
 
 if [[ $3 ]]; then
-	if [[ -z "$(xdotool search --name "$3")" || "$(xprop -id $ID | grep "NAME.*$3")" ]]; then
-		$1 &
+	if [[ $TREE != *$3* || $TITLE == *$3* ]]; then
+		swaymsg exec $1
+		[[ $W ]] && swaymsg workspace $W
 	else
-		i3 [title="$3"] focus
+		swaymsg [title="$3"] focus
 	fi
-elif [[ -z "$(xdotool search --class "$2")" || "$(xprop -id $ID | grep "CLASS.*$2")" ]]; then
-	$1 &
+elif [[ $TREE != *$2* || $CLASS$ID == *$2* ]]; then
+	swaymsg exec $1
+	[[ $W ]] && swaymsg workspace $W
 else
-	i3 [class="$2"] focus
+	swaymsg [app_id="$2"] focus || swaymsg [class="$2"] focus
 fi
-
-disown
-

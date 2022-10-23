@@ -127,7 +127,8 @@ end
 
 if status is-login
 	if test -z "$DISPLAY" -a "$XDG_VTNR" -eq 1
-		exec bash -c 'eval $(ssh-agent) && sx i3' 
-		# exec startx -- -keeptty
+		eval (ssh-agent | head -2 | sed 's/\(.*\)=\(.*\);/set \1 \2;/')
+		sway >/dev/null 2>&1
+		killall -15 ssh-agent
 	end
 end

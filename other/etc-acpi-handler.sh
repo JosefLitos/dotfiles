@@ -7,7 +7,7 @@ case "$1" in
 				[[ $(acpi) == *D* ]] && a=1
 				[[ -f /tmp/lidsleep ]] && b=1
 				((a == b)) &&
-					XAUTHORITY=/home/kepis/.local/share/sx/xauthority DISPLAY=:1 xset dpms force off ||
+					pkill -USR1 swayidle ||
 					systemctl suspend
 				;;
 		esac

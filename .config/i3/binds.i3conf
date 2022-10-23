@@ -9,10 +9,8 @@ bindsym $Mod+$Alt+Shift+g gaps outer current minus 5
 bindsym $Mod+t gaps inner current toggle 10
 bindsym $Mod+$Alt+t border toggle 2
 
-bindsym $Mod+p exec pgrep -x "picom" && killall picom || picom --experimental-backends
-bindsym $Mod+u exec $screen
-#normal image displaying
-# feh --draw-exif -d --draw-tinted --edit -. -B black -| %f
+bindsym $Mod+u $screen
+bindsym $Mod+Shift+u exec imv -f Pictures/screen
 
 #---------------+
 # App selection |
@@ -24,13 +22,13 @@ bindsym $Mod+r exec rofi -show drun
 
 # quick app starter
 bindsym $Mod+Return exec $term
-bindsym $Mod+1 exec lof firefox-nightly firefox-nightly
-bindsym $Mod+2 exec st nvim
-bindsym $mod+3 exec $term
-bindsym $Mod+5 exec lof netbeans NetBeans
-bindsym $Mod+7 exec lof gimp Gimp
-bindsym $Mod+8 exec lof thunderbird thunderbird
-bindsym $Mod+9 exec lof "tlauncher" "Minecraft.*"
+bindsym $Mod+1 exec W=$w8 lof "MOZ_ENABLE_WAYLAND=1 firefox-nightly" firefox-nightly
+bindsym $Mod+2 exec foot -dnone nvim
+bindsym $Mod+3 exec $term
+bindsym $Mod+5 exec W=$w5 lof netbeans NetBeans
+bindsym $Mod+7 exec W=$w7 lof gimp Gimp
+bindsym $Mod+8 exec W=$w6 lof "MOZ_ENABLE_WAYLAND=1 thunderbird" thunderbird
+bindsym $Mod+9 exec W=$w9 lof "tlauncher" "Minecraft.*"
 bindsym $Mod+e exec $term ranger
 bindsym $Mod+$Alt+e exec pcmanfm
 # managing/control
@@ -131,15 +129,15 @@ bindsym $Mod+Ctrl+d move workspace next, workspace next
 bindsym $Mod+Ctrl+f move workspace back_and_forth, workspace back_and_forth
 
 # quick mark
-bindsym $Mod+Ctrl+1 exec i3-msg [con_mark=1] focus | grep false && i3 mark 1
-bindsym $Mod+Ctrl+2 exec i3-msg [con_mark=2] focus | grep false && i3 mark 2
-bindsym $Mod+Ctrl+3 exec i3-msg [con_mark=3] focus | grep false && i3 mark 3
-bindsym $Mod+Ctrl+4 exec i3-msg [con_mark=4] focus | grep false && i3 mark 4
-bindsym $Mod+Ctrl+5 exec i3-msg [con_mark=5] focus | grep false && i3 mark 5
-bindsym $Mod+Ctrl+6 exec i3-msg [con_mark=6] focus | grep false && i3 mark 6
-bindsym $Mod+Ctrl+7 exec i3-msg [con_mark=7] focus | grep false && i3 mark 7
-bindsym $Mod+Ctrl+8 exec i3-msg [con_mark=8] focus | grep false && i3 mark 8
-bindsym $Mod+Ctrl+9 exec i3-msg [con_mark=9] focus | grep false && i3 mark 9
+bindsym $Mod+Ctrl+1 exec swaymsg [con_mark=1] focus | grep false && swaymsg mark 1
+bindsym $Mod+Ctrl+2 exec swaymsg [con_mark=2] focus | grep false && swaymsg mark 2
+bindsym $Mod+Ctrl+3 exec swaymsg [con_mark=3] focus | grep false && swaymsg mark 3
+bindsym $Mod+Ctrl+4 exec swaymsg [con_mark=4] focus | grep false && swaymsg mark 4
+bindsym $Mod+Ctrl+5 exec swaymsg [con_mark=5] focus | grep false && swaymsg mark 5
+bindsym $Mod+Ctrl+6 exec swaymsg [con_mark=6] focus | grep false && swaymsg mark 6
+bindsym $Mod+Ctrl+7 exec swaymsg [con_mark=7] focus | grep false && swaymsg mark 7
+bindsym $Mod+Ctrl+8 exec swaymsg [con_mark=8] focus | grep false && swaymsg mark 8
+bindsym $Mod+Ctrl+9 exec swaymsg [con_mark=9] focus | grep false && swaymsg mark 9
 # remove marks
 bindsym $Mod+Ctrl+q unmark
 
@@ -180,34 +178,30 @@ bindsym KP_End workspace prev
 # System setts |
 #--------------+
 
-set $softDisplay XAUTHORITY=~/.local/share/sx/xauthority DISPLAY=:1 xset dpms force suspend
+set $softDisplay pkill -USR1 swayidle
 set $Exit "C: L: D: Q: S: H: P: R: Esc:"
 bindsym $Mod+x mode $Exit
 bindsym --release XF86Display exec $softDisplay
 bindsym --release KP_Insert exec $softDisplay
-bindsym --release Shift+KP_Insert exec xrandr --listmonitors | grep $display && xrandr --output $display --off || xrandr --auto
+bindsym --release Shift+KP_Insert output $display toggle
 # bindsym XF86PowerOff exec $lock && systemctl suspend
-set $Modetgl ~/.config/i3/modetoggle
-bindsym $Mod+$Alt+Ctrl+f exec $Modetgl $mode
 mode $Exit {
 	bindsym c mode default, reload
-	bindsym Shift+c mode default, exec $Modetgl restart
 	bindsym e mode default, exec cpupower-gui pr Powersave && notify-send -t 1000 " Efficiency"
 	bindsym Shift+E mode default, exec $term sudo bash -c 'echo low-power > /sys/firmware/acpi/platform_profile'
 	bindsym a mode default, exec cpupower-gui pr Auto && notify-send -u low -t 1000 " Auto"
 	bindsym Shift+A mode default, exec $term sudo bash -c 'echo balanced > /sys/firmware/acpi/platform_profile'
 	bindsym w mode default, exec cpupower-gui pr Performance && notify-send -u critical -t 1000 " Performance"
 	bindsym Shift+P mode default, exec $term sudo bash -c 'echo performance > /sys/firmware/acpi/platform_profile'
-	bindsym l mode default, exec $lock
 	bindsym --release d mode default, exec $softDisplay
-	bindsym --release Shift+d mode default, exec xrandr --listmonitors | grep $display && xrandr --output $display --off || xrandr --auto
-	bindsym q exec killall sleep, exit
+	bindsym --release Shift+d mode default, output $display toggle
+	bindsym q exit
 	bindsym s mode default, exec systemctl suspend
 	bindsym h mode default, exec $([[ $(swapon --show=NAME) ]] || sudo swapon /swapfile) &&\
 		systemctl hibernate && sleep 60 && sudo swapoff /swapfile
 	bindsym p exec poweroff
 	bindsym r exec reboot
-	bindsym Shift+w mode default; exec $term sudo efibootmgr -n 0005 && reboot
+	bindsym Shift+w mode default; exec $term sudo bash -c 'efibootmgr -n 0005 && reboot'
 	bindsym b mode default, exec $term sudo bash -c \
 	'f=/sys/bus/platform/drivers/ideapad_acpi/VPC2004:00/conservation_mode && echo $((($(cat \
 	$f)+1)%2)) > $f && (($(cat $f)==0)) && echo Full Charge || echo Conservation mode && sleep 1'
@@ -228,10 +222,11 @@ set $barsig ~/.config/i3blocks/signal
 
 # Screenshot
 # my pc has PrintScreen as Fn+s
-bindsym Print exec maim -f jpg -u | xclip -selection c -t image/png
-bindsym $Mod+Print exec maim -u "Pictures/scrshot/$(date +%y-%m-%d_%H-%M-%S).png"
-bindsym Shift+Print exec "maim -lusb 2 -c 0.74,0.25,0.72,0.05 | xclip -selection c -t image/png"
-bindsym Ctrl+Print exec cd Pictures/scrshot && feh -. -B black -\| "$(ls -t|head -n1)"
+bindsym Print exec grim - | wl-copy -t image/png
+bindsym $Mod+Print exec grim -t jpeg "Pictures/scrshot/$(date +%y-%m-%d_%H-%M-%S).jpg"
+bindsym Shift+Print exec swaymsg -t get_tree | jq -r '.. | select(.pid? and .visible?) | .rect | "\(.x),\(.y) \(.width)x\(.height)"' \
+	| slurp -d -c ad30a8 -s ad30a822 -b 00000000 -B 55991522 | grim -c -g - - | wl-copy -t image/png
+bindsym Ctrl+Print exec imv -n "$(ls -t Pictures/scrshot|head -n1)" Pictures/scrshot
 
 # Keyboard layout toggle, manual
 bindsym $Mod+n exec $barsig kb
@@ -241,15 +236,17 @@ bindsym $Alt+Escape exec $barsig kb
 bindsym $Mod+$Alt+p exec $term -e bashmount
 # poweroff and eject any connected device (udisksctl power-off -b /dev/sdx0)
 
+# Keyboard change
+bindsym $Mod+n exec $barsig kb
 # Change gamma, "redshift" manually - n for night
-bindsym $Mod+$Alt+n exec pgrep -x "redshift" && killall redshift || redshift -l 50:14.5
-bindsym $Mod+Shift+n exec xrandr --output $display --gamma 1
+bindsym $Mod+$Alt+n exec wlsunset -l 50 -L 14.5 &
+bindsym $Mod+Shift+n exec killall wlsunset
 
 # Rotating screen
-bindsym $Alt+Ctrl+Left exec xrandr -o left
-bindsym $Alt+Ctrl+Right exec xrandr -o right
-bindsym $Alt+Ctrl+Up exec xrandr -o normal
-bindsym $Alt+Ctrl+Down exec xrandr -o inverted
+bindsym $Alt+Ctrl+Left output $display transform 270
+bindsym $Alt+Ctrl+Right output $display transform 90
+bindsym $Alt+Ctrl+Up output $display transform normal
+bindsym $Alt+Ctrl+Down output $display transform 180
 
 # Brightness
 bindsym $Mod+b exec $barsig light ↑

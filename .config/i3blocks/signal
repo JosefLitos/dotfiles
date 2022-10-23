@@ -24,8 +24,8 @@ case "$1" in
 		pkill -RTMIN+11 i3blocks
 		;;
 	"kb")
-		[[ $(setxkbmap -query | awk '/^l/ { print $2 }') == us ]] && kb=cz || kb=us
-		setxkbmap -option caps:escape,compose:102 -layout $kb
+		[[ $(swaymsg -t get_inputs -p | grep US -m 1) ]] && kb=cz || kb=us
+		swaymsg input "1:1:AT_Translated_Set_2_keyboard" xkb_switch_layout next
 		notify-send -a signal -h string:synchronous:kb " $kb"
 		pkill -RTMIN+12 i3blocks
 		;;

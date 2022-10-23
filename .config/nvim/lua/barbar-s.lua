@@ -6,8 +6,8 @@ require'bufferline'.setup {
 }
 
 -- Moving between
-nmap("n", "<M-S-lt>", "<Cmd>BufferMovePrevious<CR>")
-nmap("n", "<M-S->>", "<Cmd>BufferMoveNext<CR>")
+nmap("n", "<M-S-,>", "<Cmd>BufferMovePrevious<CR>")
+nmap("n", "<M-S-.>", "<Cmd>BufferMoveNext<CR>")
 nmap("", "<M-,>", "<Cmd>BufferPrevious<CR>")
 nmap("i", "<M-,>", "<C-o><Cmd>BufferPrevious<CR>")
 nmap("t", "<M-,>", "<Esc><Cmd>BufferPrevious<CR>i")

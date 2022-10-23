@@ -69,27 +69,24 @@ arp-scan
 bc
 bashmount
 bat
-cpupower-gui
 dragon-drop
 dunst
 engrampa
 exa
 fd
-feh
 fish
 fzf
 gnu-netcat
 go
 gparted
+grim
 grub
 htop
-i3-gaps
 i3blocks
-i3lock-fancy-rapid-git
+imv
 inxi
+jq
 linux-firmware
-lxappearance-gtk3
-maim
 man-db
 man-pages
 mpv-mpris
@@ -106,11 +103,9 @@ otf-overpass
 p7zip
 pacman-contrib
 pcmanfm-gtk3
-picom-ibhagwan-git
 pipewire-alsa
 pipewire-pulse
 playerctl
-polkit-gnome
 pulsemixer
 python-pynvim
 qt5ct
@@ -118,10 +113,13 @@ ranger
 redshift
 reflector
 ripgrep
-rofi
 rofi-dmenu
+rofi-lbonn-wayland-only-git
+slurp
+sway
+swaybg
+swayidle
 sweet-cursor-theme-git
-sx
 ttf-exo-2
 ttf-fira-code
 ttf-joypixels
@@ -129,20 +127,12 @@ ttf-nova
 udisks2
 ueberzug
 ufw
-w3m
 wget
 wireplumber
-xclip
-xdotool
-xorg-xdpyinfo
-xorg-xev
-xorg-xgamma
-xorg-xinput
-xorg-xkbutils
-xorg-xkill
-xorg-xmodmap
-xorg-xrandr
-xorg-xwininfo
+wl-clipboard
+wlsunset
+xdg-desktop-portal-wlr
+xorg-xwayland
 yt-dlp')
 	wget https://archive.archlinux.org/packages/o/otf-font-awesome/otf-font-awesome-5.15.4-1-any.pkg.tar.zst
 	paru --noconfirm -U otf-font-awesome*
@@ -158,7 +148,6 @@ yt-dlp')
 		sudo systemctl enable ufw.service
 		sudo systemctl enable acpid
 		sudo ln -s $PWD/other/etc-acpi-handler.sh /etc/acpi/handler.sh
-		sudo cp other/40-libinput.conf /etc/X11/xorg.conf.d/
 		sudo rm -r /var/log/journal
 		bat cache --build
 	}
@@ -168,6 +157,7 @@ yt-dlp')
 guis() {
 	printf '\nInstalling GUI applications.\n'
 	paru --needed -S $(printf '
+cpupower-gui
 firefox
 gimp
 inkscape

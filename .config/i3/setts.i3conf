@@ -3,41 +3,40 @@ set $float for_window [class=".*"] floating enable
 # Uncomment to enable floating behaviour
 #$float
 
-for_window [class="Lxappearance"] floating enable
-for_window [class="Blockbench"] border pixel 2
-for_window [window_type="utility" class="[^(vlc)]"] floating enable, sticky enable
-for_window [class="Dragon-drop"] floating enable, sticky enable
-for_window [window_type="dialog"] floating enable, border none
+for_window [app_id="dragon-drop"] floating enable, sticky enable
+for_window [title="Picture-in-Picture"] floating enable, sticky enable, border pixel 2
 for_window [title=".*Android Emulator.*"] floating enable, border none
 for_window [title="win0"] floating enable
-for_window [class="thunderbird" instance="Calendar"] floating enable
-for_window [class="thunderbird" instance="Msgcompose"] floating enable
+for_window [app_id="cpupower-gui"] floating enable, border pixel 2
+for_window [app_id="thunderbird" instance="Calendar"] floating enable
+for_window [app_id="thunderbird" instance="Msgcompose"] floating enable
 for_window [class="ru-turikhay-tlauncher-bootstrap-Bootstrap"] floating enable
 for_window [class="scrcpy"] focus, floating enable, move position -1 191, resize set 1922 890
 
-for_window [urgent="latest"] focus
+xwayland enable
 focus_follows_mouse no
 mouse_warping none
 # Use Mouse+$Mod to drag floating windows
 floating_modifier $Mod
 
 ## Window style
-for_window [floating] border pixel 2
+default_floating_border pixel 2
 default_border pixel 2
 gaps inner 10
 font pango: Nova Square 15
 
 # Window border colours
-set $bg #10101088
+set $tbg #10101088
+set $bg #00000000
 set $hi #77dd22
 set $hi2 #54a015
 set $con #ad30a8
 set $text #f0eeea
 
-# class                 border  bg   text    indic.  child_border
-client.focused          $hi2    $bg $text   $con    $hi2
-client.focused_inactive $bg    $bg  $text   #32302d $bg
-client.unfocused        $bg    $bg  $text   #22201d $bg
+# class                 border  bg    text    indic.  child_border
+client.focused          $hi2    $tbg  $text   $con    $hi2
+client.focused_inactive $bg     $tbg  $text   #32302d $bg
+client.unfocused        $bg     $tbg  $text   #22201d $bg
 client.background #00000000
 
 ## Workspaces
@@ -53,12 +52,12 @@ set $w7 ""
 set $w8 ""
 set $w9 ""
 
-workspace $w1 output 1
-workspace $w2 output 1
+workspace $w1 output $display
+workspace $w2 output $display
 workspace $w3 output 2
 workspace $w4 output 2
-workspace $w5 output 1
-workspace $w6 output 1
+workspace $w5 output $display
+workspace $w6 output $display
 workspace $w7 output 2
 workspace $w8 output 2
 workspace $w9 output 2
@@ -70,11 +69,13 @@ smart_gaps on
 assign [title=".*craft.*" class="Minecraft.*"] $w9
 assign [class=".*.exe"] $w9
 assign [class="[sS]team.*"] $w9
-assign [class="firefox"] $w8
-assign [class="vlc|mpv|Gimp|Inkscape"] $w7
+assign [app_id="firefox"] $w8
+assign [app_id="vlc|mpv|Gimp|Inkscape"] $w7
 assign [title=".*LibreOffice.*|Soffice"] $w6
-assign [class="thunderbird|tutanota-desktop"] $w6
+assign [app_id="thunderbird|tutanota-desktop"] $w6
 assign [class="NetBeans"] $w5
+
+set $bar #222222ff
 
 ## Statusbar setup
 bar {
@@ -83,17 +84,16 @@ bar {
 	# modes: dock, hide, invisible
 	mode dock
 	modifier $Mod+Ctrl
-	i3bar_command i3bar --transparency
 	separator_symbol " "
 	position top
 
 	colors {
 		statusline $text
 		#separator #aaaaaa
-		background $bg
-		# name             border  bg      fg
-		focused_workspace  $bg     $bg     $hi2
-		inactive_workspace $bg     $bg     $con
-		urgent_workspace   $bg     $bg     #f03522
+		background $bar
+		# name             border   bg       fg
+		focused_workspace  $bar     $bar     $hi2
+		inactive_workspace $bar     $bar     $con
+		urgent_workspace   $bar     $bar     #f03522
 	}
 }

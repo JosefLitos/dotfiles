@@ -17,8 +17,8 @@ vim.g.mapleader = " "
 nmap("n", "<C-S-lt>", "<<")
 nmap("i", "<C-S-lt>", "<C-d>")
 nmap("i", "<C-S-T>", "<C-d>")
-nmap("n", "<C-S->>", ">>")
-nmap("i", "<C-S->>", "<C-t>")
+nmap("n", "<C-S-,>", ">>")
+nmap("i", "<C-S-.>", "<C-t>")
 
 -- Clipboard management
 nmap("n", "<C-x>", "dd")

@@ -1,14 +1,33 @@
 # Desktop looks
-exec $screen
-exec picom --experimental-backends
+$screen
+exec {
+	gsettings set org.gnome.desktop.interface gtk-theme 'Material-Black-Lime-3.38'
+	gsettings set org.gnome.desktop.interface icon-theme 'MB-Olive'
+	gsettings set org.gnome.desktop.interface cursor-theme 'Sweet-cursors'
+	gsettings set org.gnome.desktop.interface cursor-size '32'
+	gsettings set org.gnome.desktop.interface font-name 'Nova Square 16'
+}
 
 # Background daemons
-exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
-exec dunst
-exec redshift -l 50:14.5
-# exec --no-startup-id nm-applet
+exec {
+	swayidle timeout 300 'swaymsg "output * dpms off"' resume 'swaymsg "output * dpms on"'
+	wlsunset -l 50 -L 14.5
+}
 
 # One time changes
-exec acpi | grep D && which cpupower-gui && cpupower-gui pr Powersave
-exec_always xset r rate 225 40 && xmodmap -e "clear lock" -e "keycode 0x42 = Escape" && xset s 300
-exec_always xrandr -r 50
+exec acpi | grep D && which cpupower-gui && cpupower-gui pr Powersave >/dev/null
+
+# Sway specific
+seat seat0 xcursor_theme 'Sweet-cursors' 32
+output eDP-1 pos 0,0 adaptive_sync on
+
+input "type:keyboard" {
+	xkb_layout us,cz
+	xkb_options caps:escape,compose:102
+	repeat_delay 225
+	repeat_rate 40
+}
+input "type:touchpad" {
+	tap enabled
+	middle_emulation enabled
+}
