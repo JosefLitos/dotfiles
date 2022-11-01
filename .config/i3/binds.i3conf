@@ -236,8 +236,6 @@ bindsym $Alt+Escape exec $barsig kb
 bindsym $Mod+$Alt+p exec $term -e bashmount
 # poweroff and eject any connected device (udisksctl power-off -b /dev/sdx0)
 
-# Keyboard change
-bindsym $Mod+n exec $barsig kb
 # Change gamma, "redshift" manually - n for night
 bindsym $Mod+$Alt+n exec wlsunset -l 50 -L 14.5 &
 bindsym $Mod+Shift+n exec killall wlsunset
