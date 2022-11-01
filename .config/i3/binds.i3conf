@@ -235,7 +235,7 @@ bindsym Ctrl+Print exec cd Pictures/scrshot && feh -. -B black -\| "$(ls -t|head
 
 # Keyboard layout toggle, manual
 bindsym $Mod+n exec $barsig kb
-#exec setxkbmap -layout us,cz -option -option grp:alt_shift_toggle
+bindsym $Alt+Escape exec $barsig kb
 
 # Disk connection management
 bindsym $Mod+$Alt+p exec $term -e bashmount
