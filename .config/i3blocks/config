@@ -62,9 +62,9 @@ interval=60
 # # icons:   
 # command=echo  $(inxi -Gc 0 | sed -n '/Display/s/.* loaded: //p' | sed 's/ .*//;s/intel/I/;s/nvidia/N/;s/modesetting/M/')
 
-# [kb]
-# command=echo  $(setxkbmap -query | awk '/^l/ { print toupper($2) }')
-# signal=12
+[kb]
+command=[[ $(swaymsg -t get_inputs -p | grep US -m 1) ]] && echo  US || echo  CZ
+signal=12
 
 [date]
 command=date +" %a %d.%m."
