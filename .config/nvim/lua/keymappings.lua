@@ -154,6 +154,7 @@ nmap("n", "S", "<Cmd>cd %:h<CR><Cmd>term<CR><Cmd>setlocal nonu<CR>i")
 nmap("n", "<Leader>d", "<Cmd>cd %:h<CR>")
 
 -- Refresh and reload
+nmap("n", "<C-n>", "<Cmd>enew | Startify<CR>")
 nmap({"n", "i"}, "<F5>", "<Cmd>e<CR>")
 nmap({"n", "i"}, "<F17>", "<Cmd>e!<CR>")
 nmap("n", "<Leader>l", "<Cmd>luafile %<CR>")
@@ -179,7 +180,7 @@ nmap("n", "X", function()
 		vim.api.nvim_echo("ERROR")
 	end
 end)
--- Ignore mapping
+-- Ignore key
 nmap({"", "!"}, "<kInsert>", "")
 
 -- Compiling

@@ -47,7 +47,6 @@ augroup _general_settings
 	au BufRead *.tex setlocal ft=latex
 	au BufRead *.c setlocal ft=cpp
 	au BufRead,BufNewFile *fontconfig/* setlocal ft=xml
-	au BufRead,BufNewFile */X11/xorg* setlocal ft=xf86conf
 	au FileType text setlocal nonu signcolumn=no nocursorline nocursorcolumn tw=0
 	au FileType i3config setlocal tw=0
 augroup end

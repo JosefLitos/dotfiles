@@ -69,7 +69,7 @@ bindsym $Mod+minus scratchpad show
 #--------+
 # Arrows |
 #--------+
-set $floatpos ~/.config/i3/floatpos
+set $floatpos ~/.config/sway/floatpos
 # floating mode, with tilling mode compatibility
 bindsym $Mod+Left exec $floatpos l
 bindsym $Mod+Down exec $floatpos d

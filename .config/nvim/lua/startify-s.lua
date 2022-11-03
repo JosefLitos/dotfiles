@@ -10,21 +10,17 @@ vim.g.startify_change_to_vcs_root = 1
 vim.g.startify_session_autoload = 1
 vim.g.startify_enable_special = 0
 vim.g.startify_bookmarks = {
-	{st = "~/st/config.h"},
-	{ic = "~/.config/i3/binds.i3conf"},
-	{i3 = "~/.config/i3/"},
+	{ic = "~/.config/sway/binds.i3conf"},
+	{i3 = "~/.config/sway/"},
 	{ib = "~/.config/i3blocks/"},
-	{pi = "~/.config/picom/picom.conf"},
 	{ra = "~/.config/ranger/rc.conf"},
 	{rf = "~/.config/rofi/config.rasi"},
 	{fn = "~/.config/fontconfig/fonts.conf"},
 	{fc = "~/.config/fish/config.fish"},
 	{vi = "~/.config/nvim/lua"},
 	{dd = "~/Documents/"},
-	{dp = "~/Documents/PG/"},
 	{ds = "~/Documents/PG/litosjos/"},
 	{dc = "~/dotfiles/.config/"},
 }
 
-nmap("n", "<C-n>", "<Cmd>enew | Startify<CR>")
 automap("n", "startify", "<Esc>", "<Cmd>BufferClose<CR>")
