@@ -179,9 +179,11 @@ nmap("n", "X", function()
 		vim.api.nvim_echo("ERROR")
 	end
 end)
+-- Ignore mapping
+nmap({"", "!"}, "<kInsert>", "")
 
 -- Compiling
-local mdC = '<C-s><Cmd>!firefox --new-tab (compiler "%:p") & && i3 [class="firefox"] focus<CR><CR>'
+local mdC = '<C-s><Cmd>!firefox-nightly --new-tab (compiler "%:p") & && swaymsg [app_id="firefox-nightly"] focus<CR><CR>'
 automap("n", "markdown", "<M-r>", mdC, true)
 automap("i", "markdown", "<M-r>", mdC, true)
 local cC = "<C-s><Cmd>cd %:h<CR><Cmd>term compiler %:p<CR><Cmd>setlocal nonu<CR>"

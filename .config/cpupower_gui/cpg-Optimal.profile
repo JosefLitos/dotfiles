@@ -1,4 +1,4 @@
-# name: Powersave
+# name: Optimal
 
 # CPU	Min	Max	Governor	Online
 0	400	4463	conservative	True
