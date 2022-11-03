@@ -4,14 +4,6 @@ separator=true
 markup=pango
 interval=once
 
-# [activewin]
-# label=:
-# command=i3title -s
-# interval=-3
-# color=#2798f0
-# align=center
-# min_width=850
-
 [updates]
 interval=once
 signal=20
@@ -39,9 +31,6 @@ signal=20
 # [cpu_temp]
 # interval=2
 
-# [fan]
-# interval=5
-
 # [powerdraw]
 # interval=5
 # command=echo " $(bc <<< "scale=1;$(cat /sys/class/power_supply/BAT0/power_now)/1000000")W"
@@ -58,12 +47,9 @@ signal=11
 [battery]
 interval=60
 
-# [gpu_dri]
-# # icons:   
-# command=echo  $(inxi -Gc 0 | sed -n '/Display/s/.* loaded: //p' | sed 's/ .*//;s/intel/I/;s/nvidia/N/;s/modesetting/M/')
-
 [kb]
 command=[[ $(swaymsg -t get_inputs -p | grep US -m 1) ]] && echo  US || echo  CZ
+color=#bd40b7
 signal=12
 
 [date]

@@ -8,8 +8,8 @@ export FZF_DEFAULT_COMMAND='rg --hidden -l ""'
 
 set -x READER nvim
 set -x EDITOR nvim
-set -x BROWSER firefox
-set -x TERMINAL st
+set -x BROWSER firefox-nightly
+set -x TERMINAL foot
 
 function fish_greeting
 end
