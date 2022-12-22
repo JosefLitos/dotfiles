@@ -2,7 +2,7 @@
 	name = JosefLitos
 	email = litosjos@fit.cvut.cz
 [color]
-  ui = auto
+  ui = true
 [color "branch"]
   current = green
   local = default
@@ -18,3 +18,5 @@
   untracked = blue
 [pull]
 	rebase = false
+[alias]
+	ll = log --oneline --graph --all --decorate

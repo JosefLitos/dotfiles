@@ -111,7 +111,7 @@
 			<key>name</key>
 			<string>Keyword</string>
 			<key>scope</key>
-			<string>keyword, storage, entity.name.function.man, variable.language, support.constant.builtin, support.function.builtin.lua, keyword.operator.module, keyword.operator.js, keyword.operator.new, support.function.exit, support.function.echo, support.function.cd</string>
+			<string>keyword, storage, entity.name.function.man, variable.language, support.constant.builtin, support.function.builtin.lua, keyword.operator.module, keyword.operator.js, keyword.operator.new, support.function.exit, support.function.echo, support.function.cd, keyword.operator.word, keyword.control.flow.return</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -122,7 +122,7 @@
 			<key>name</key>
 			<string>Conditional</string>
 			<key>scope</key>
-			<string>keyword.control.conditional, keyword.control.switch, keyword.control.loop, keyword.operator.ternary, keyword.operator.logical.lua, keyword.control.lua, keyword.control.in</string>
+			<string>keyword.control.conditional, keyword.control.switch, keyword.control.loop, keyword.operator.ternary, keyword.operator.logical.lua, keyword.control.lua, keyword.control.in, keyword.control.c, keyword.control.flow.break</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -157,9 +157,9 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Field2</string>
+			<string>Property</string>
 			<key>scope</key>
-			<string>string.unquoted.key</string>
+			<string>string.unquoted.key, meta.property.lua</string>
 			<key>settings</key>
 			<dict>
 				<key>fontStyle</key>
@@ -207,9 +207,20 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Constants</string>
+			<string>Global Variable</string>
 			<key>scope</key>
-			<string>constant, support.type.object, entity.name.constant</string>
+			<string>variable.other.readwrite.global, variable.other.readwrite.static</string>
+			<key>settings</key>
+			<dict>
+				<key>foreground</key>
+				<string>#0a000000</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>name</key>
+			<string>Builtin Constants</string>
+			<key>scope</key>
+			<string>constant.language, support.type.object, entity.name.constant</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -229,9 +240,9 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Library constant</string>
+			<string>Constants</string>
 			<key>scope</key>
-			<string>support.constant</string>
+			<string>support.constant, entity.name.constant.preprocessor, constant</string>
 			<key>settings</key>
 			<dict>
 				<key>fontStyle</key>
@@ -255,9 +266,9 @@
 		</dict>
 		<dict>
 			<key>name</key>
-			<string>Markup: raw inline</string>
+			<string>PreProc and Macro</string>
 			<key>scope</key>
-			<string>text.html.markdown markup.raw.inline</string>
+			<string>text.html.markdown markup.raw.inline, keyword.control.import</string>
 			<key>settings</key>
 			<dict>
 				<key>foreground</key>
@@ -292,7 +303,7 @@
 			<key>name</key>
 			<string>Markup: underline</string>
 			<key>scope</key>
-			<string>markup.underline, string.other.link</string>
+			<string>markup.underline</string>
 			<key>settings</key>
 			<dict>
 				<key>fontStyle</key>
@@ -308,6 +319,8 @@
 			<string>markup.heading</string>
 			<key>settings</key>
 			<dict>
+				<key>fontStyle</key>
+				<string>bold</string>
 				<key>foreground</key>
 				<string>#0a000000</string>
 			</dict>

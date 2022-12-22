@@ -8,7 +8,6 @@ fi
 
 export VISUAL=nvim
 export BROWSER=firefox
-export TERMINAL=st
 export TERM=xterm-256color
 
 export PS1="\[\e[40;1m\]\$([ \$? = 0 ] && echo \[\e[92m\]0 || echo \[\e[91m\]\$?) \[\e[0;40;32m\]\u\[\e[34m\]@\[\e[94m\]\h\[\e[1;93m\]:\[\e[0;40;35m\]\W \$([ \$USER = root ] && echo '\[\e[1;31m\]#' || echo '\[\e[1;32m\]\$')\[\e[0;30m\]\[\e[0m\]"

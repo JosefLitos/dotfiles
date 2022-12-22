@@ -4,18 +4,18 @@
 export _JAVA_AWT_WM_NONREPARENTING=1
 # use bat to color man pages
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+abbr man batman
 export FZF_DEFAULT_COMMAND='rg --hidden -l ""'
 
 set -x READER nvim
 set -x EDITOR nvim
 set -x BROWSER firefox-nightly
-set -x TERMINAL foot
 
 function fish_greeting
 end
 
 function fish_title
-	printf (basename $PWD)" - Fish"
+	printf "Fish - "(basename $PWD)
 end
 
 function fish_prompt
@@ -83,6 +83,8 @@ abbr s 			"sensors"
 abbr cp 		"cp -i"
 abbr mv 		"mv -i"
 abbr smci		"sudo make clean install"
+abbr gparted "xhost +SI:localuser:root && sudo gparted; xhost -SI:localuser:root"
+abbr mec    "pw-cli load-module libpipewire-module-echo-cancel"
 
 # get error messages from journalctl
 abbr jctl 		"journalctl -p 3 -b"
@@ -95,13 +97,14 @@ abbr psr 		"paru -Rscn (paru -Qeq | fzf -m --preview 'paru -Si {1}'  --preview-w
 
 # navigation
 abbr ...    "cd ../.."
-abbr cds    "cd ~/Documents/PG/litosjos/"
-abbr cdd 		"cd ~/dotfiles"
-abbr dup 		"cd ~/dotfiles; git pull"
+abbr cdd		"cd ~/dotfiles"
+abbr dup		"cd ~/dotfiles; git pull"
 abbr gp			"git push"
+abbr gpt		"git push origin --tags"
 abbr gu			"git pull"
 abbr gb			"git checkout -b"
 abbr gg			"git checkout"
+abbr gs			"git status"
 abbr ga			"git add -A && git commit"
 abbr gd			"git branch -d (git branch | fzf | sed 's/.* //')"
 
@@ -119,7 +122,6 @@ abbr adh    "adb connect 192.168.0.102:5555"
 abbr con    "arp -a"
 
 abbr fit		"ssh -oHostKeyAlgorithms=ssh-rsa litosjos@fray1.fit.cvut.cz"
-abbr dw			"~/Documents/PG/litosjos/"
 
 function fish_user_key_bindings
 	fzf_key_bindings
@@ -132,3 +134,4 @@ if status is-login
 		killall -15 ssh-agent
 	end
 end
+# vim: ft=bash

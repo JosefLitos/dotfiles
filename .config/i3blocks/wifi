@@ -3,18 +3,17 @@
 
 #Nice icons:    
 if [[ $button -eq 1 ]]; then
-	i3 exec -- st -e nmtui &> /dev/null
+	term -e nmtui &> /dev/null
 fi
 
 if [[ $BLOCK_INSTANCE ]]; then
 	read -a line <<< $(ip a s $BLOCK_INSTANCE)
 else
 	while read -a line; do
-		[[ ${line[1]} == wlp* ]] && break
+		[[ ${line[1]} =~ ^wlo || ${line[1]} =~ ^wlp ]] && BLOCK_INSTANCE=${line[1]} && break
 	done <<< $(ip a)
-	BLOCK_INSTANCE=wlp
 fi
-[[ ${line[2]} == *UP* ]] && on=1
+[[ ${line[2]} =~ UP ]] && on=1
 if [[ $on ]]; then
 	while read -a line; do
 		[[ ${line[0]} == "$BLOCK_INSTANCE"* ]] &&
@@ -24,6 +23,6 @@ if [[ $on ]]; then
 fi
 TEXT=$([[ $on ]] && ([[ $quality ]] && echo " $quality%: $ssid" || echo "") || echo "")
 
-echo "$TEXT"
-echo "$TEXT"
-~/.config/i3blocks/colorcode $([[ -z "$quality" && "$on" ]] && echo 0 || echo $quality)
+echo "$TEXT
+$TEXT"
+~/.config/i3blocks/colorcode $quality

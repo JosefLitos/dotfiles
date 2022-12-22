@@ -2,8 +2,6 @@
 # launch or focus app
 # $1=app name; $2=displayed class; $3=optional, window name
 
-TREE=$(swaymsg -t get_tree)
-
 while IFS='"' read -a line; do
 	case ${line[1]} in
 		class)
@@ -17,18 +15,22 @@ while IFS='"' read -a line; do
 			break
 			;;
 	esac
-done < <(echo "$TREE" | jq ".. | select(.type?) | select(.focused) | {app_id,window_properties}")
+done < <(swaymsg -t get_tree | jq ".. | select(.type?) | select(.focused) | {app_id,window_properties}")
 
 if [[ $3 ]]; then
-	if [[ $TREE != *$3* || $TITLE == *$3* ]]; then
-		swaymsg exec $1
-		[[ $W ]] && swaymsg workspace $W
+	if [[ $TITLE =~ $3 && ( $CLASS =~ $2 || $ID =~ $2 ) ]]; then
+		launch=1
+	elif [[ $2 != null ]]; then
+		swaymsg [app_id="$2" title="$3"] focus || swaymsg [class="$2" title="$3"] focus || launch=1
 	else
-		swaymsg [title="$3"] focus
+		swaymsg [title="$3"] focus || launch=1
 	fi
-elif [[ $TREE != *$2* || $CLASS$ID == *$2* ]]; then
-	swaymsg exec $1
-	[[ $W ]] && swaymsg workspace $W
 else
-	swaymsg [app_id="$2"] focus || swaymsg [class="$2"] focus
+	[[ $ID =~ $2 || $CLASS =~ $2 ]] && launch=1 ||
+		swaymsg [app_id="$2"] focus || swaymsg [class="$2"] focus || launch=1
+fi
+
+if [[ $launch ]]; then
+	[[ $W ]] && swaymsg workspace $W
+	swaymsg exec $1
 fi

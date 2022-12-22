@@ -62,6 +62,6 @@ else
 	TEXT=" ${rx_KiB}K"
 fi
 
-echo $TEXT
-echo $TEXT
+echo "$TEXT
+$TEXT"
 ~/.config/i3blocks/colorcode $((100 - rx_KiB * 100 / 5120))

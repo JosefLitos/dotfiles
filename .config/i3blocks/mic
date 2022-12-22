@@ -7,7 +7,7 @@ if [[ $button ]]; then
 	elif ((button == 1)); then
 		pactl set-source-mute 0 toggle
 	else
-		~/.config/i3/term -e pulsemixer &
+		term -e pulsemixer &
 		disown
 	fi
 fi
@@ -18,7 +18,8 @@ MUTED=($(pactl get-source-mute 0))
 MUTED=${MUTED[1]}
 
 if [[ -z $VOL ]]; then
-	echo " ?"
+	printf " ?\n ?\n"
+	~/.config/i3blocks/colorcode ?
 	exit 0
 fi
 
@@ -31,6 +32,6 @@ else
 fi
 
 notify-send -a signal -h int:value:$VOL -h string:synchronous:mic "$ICON $VOL"
-echo "$ICON $VOL%"
-echo "$ICON $VOL%"
+echo "$ICON $VOL%
+$ICON $VOL%"
 ~/.config/i3blocks/colorcode $((VOL * 3))

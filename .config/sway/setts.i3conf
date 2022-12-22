@@ -3,27 +3,28 @@ set $float for_window [class=".*"] floating enable
 # Uncomment to enable floating behaviour
 #$float
 
+## Window style
+default_floating_border pixel $border
+default_border pixel $border
+gaps inner 17
+font pango: Nova Square 15
+
 for_window [app_id="dragon-drop"] floating enable, sticky enable
-for_window [title="Picture-in-Picture"] floating enable, sticky enable, border pixel 2
+for_window [title="Picture-in-Picture"] floating enable, sticky enable, border pixel 1
 for_window [title=".*Android Emulator.*"] floating enable, border none
 for_window [title="win0"] floating enable
-for_window [app_id="cpupower-gui"] floating enable, border pixel 2
+for_window [app_id="cpupower-gui"] floating enable, border pixel $border
 for_window [app_id="thunderbird" instance="Calendar"] floating enable
 for_window [app_id="thunderbird" instance="Msgcompose"] floating enable
 for_window [class="ru-turikhay-tlauncher-bootstrap-Bootstrap"] floating enable
 for_window [class="scrcpy"] focus, floating enable, move position -1 191, resize set 1922 890
+for_window [class="Ripcord" title="Edit Message"] floating enable
 
 xwayland enable
 focus_follows_mouse no
 mouse_warping none
-# Use Mouse+$Mod to drag floating windows
+# Use Mouse+↓ to drag floating windows
 floating_modifier $Mod
-
-## Window style
-default_floating_border pixel 2
-default_border pixel 2
-gaps inner 10
-font pango: Nova Square 15
 
 # Window border colours
 set $tbg #10101088
@@ -32,9 +33,10 @@ set $hi #77dd22
 set $hi2 #54a015
 set $con #ad30a8
 set $text #f0eeea
+set $bor #40a3e0
 
 # class                 border  bg    text    indic.  child_border
-client.focused          $hi2    $tbg  $text   $con    $hi2
+client.focused          $bor    $tbg  $text   $con    $bor
 client.focused_inactive $bg     $tbg  $text   #32302d $bg
 client.unfocused        $bg     $tbg  $text   #22201d $bg
 client.background #00000000
@@ -46,38 +48,44 @@ set $w1 ""
 set $w2 ""
 set $w3 "<b>3</b>"
 set $w4 "<b>4</b>"
-set $w5 ""
-set $w6 ""
+set $w5 ""
+set $w6 ""
 set $w7 ""
-set $w8 ""
+set $w8 ""
 set $w9 ""
-
-workspace $w1 output $display
-workspace $w2 output $display
-workspace $w3 output 2
-workspace $w4 output 2
-workspace $w5 output $display
-workspace $w6 output $display
-workspace $w7 output 2
-workspace $w8 output 2
-workspace $w9 output 2
 
 workspace $w9 gaps inner 0
 hide_edge_borders smart
 smart_gaps on
 
-assign [title=".*craft.*" class="Minecraft.*"] $w9
+assign [title="^Minecraft.? 1\.[1-2][0-9][0-9.]*$"] $w9
 assign [class=".*.exe"] $w9
 assign [class="[sS]team.*"] $w9
-assign [app_id="firefox"] $w8
+assign [app_id="firefox.*"] $w8
 assign [app_id="vlc|mpv|Gimp|Inkscape"] $w7
 assign [title=".*LibreOffice.*|Soffice"] $w6
 assign [app_id="thunderbird|tutanota-desktop"] $w6
 assign [class="NetBeans"] $w5
 
-set $bar #222222ff
+# Outputs
+set $USBC DP-1
+set $HDMI HDMI-A-1
+output $display pos 0,0
+output $USBC mode 3840x2160@60Hz scale 2
+output $HDMI adaptive_sync on scale 2
+
+workspace $w1 output $display
+workspace $w2 output $display
+workspace $w3 output $HDMI
+workspace $w4 output $USBC
+workspace $w5 output $display
+workspace $w6 output $display
+workspace $w7 output $HDMI
+workspace $w8 output $HDMI
+workspace $w9 output $HDMI
 
 ## Statusbar setup
+set $bar #222222ff
 bar {
 	height 24
 	status_command i3blocks

@@ -21,14 +21,14 @@
 	foreground = "#f0eeea"
 	background = "#1c1c1c"
 	highlight = "#ad30a8"
-	timeout = 5
+	timeout = 3
 
 [urgency_normal]
 	frame_color = "#54a015"
 	foreground = "#f0eeea"
 	background = "#1c1c1c"
 	highlight = "#54a015"
-	timeout = 10
+	timeout = 5
 
 [urgency_critical]
 	frame_color = "#f03522"

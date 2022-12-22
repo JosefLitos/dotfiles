@@ -50,5 +50,6 @@ Power off')" in
 	TEXT="$TEXT $STATE% $TIME"
 fi
 
-printf "%s\n%s\n" "$TEXT" "$TEXT"
+echo "$TEXT
+$TEXT"
 ~/.config/i3blocks/colorcode $STATE

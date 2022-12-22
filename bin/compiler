@@ -17,7 +17,7 @@ basename=${base##*\/}
 cd "$dir" || exit
 
 textype() {
-	if [[ $basename =~ ^.*[[:space:]]P[0-9]*$ ]]; then
+	if [[ $basename =~ [[:space:]]P[0-9]*$ ]]; then
 		basename=$(echo "$basename" | sed 's/\(^.*\sP\)[0-9]*$/\10/')
 		base=$(echo "$base" | sed 's/\(^.*\sP\)[0-9]*$/\10/')
 	elif [[ -f $dir/prace.tex ]]; then
@@ -48,7 +48,7 @@ case "$file" in
 		echo /tmp/"$basename".html
 		;;
 	*config\.h) make clean install ;;
-	*\.c) g++ -Wall -pedantic "$file" -o "$base.out" ;;
+	*\.c) g++ -Wall -pedantic -std=c++17 -O2 "$file" -o "$base.out" ;;
 	*\.py) python "$file" ;;
 	*\.m) octave "$file" ;;
 	*\.scad) openscad -o "$base".stl "$file" ;;

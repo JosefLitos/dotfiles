@@ -4,13 +4,12 @@ separator=true
 markup=pango
 interval=once
 
-[updates]
-interval=once
-signal=20
+# [updates]
+# interval=once
+# signal=20
 
 # [wifi]
 # interval=60
-# instance=wlp3s0
 
 # [bandwidth]
 # interval=5

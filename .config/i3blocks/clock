@@ -6,6 +6,7 @@ else
 	TEXT=$(date +" %H:%M")
 fi
 
-printf "$TEXT\n$TEXT\n"
+echo "$TEXT
+$TEXT"
 
 #~/.config/i3blocks/colorcode $((($(date +%H) * 3600 + $(date +%M)) / 432))

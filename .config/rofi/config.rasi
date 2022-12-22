@@ -1,4 +1,5 @@
 configuration {
+	matching: "normal";
 	modi: "window,drun,run"; //ssh
 	show-icons: true;
 	terminal: "st";
@@ -21,4 +22,3 @@ configuration {
 }
 //@theme "MB-Lime-dmenu"
 @theme "MB-Lime"
-// vim: ft=c

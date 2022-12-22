@@ -23,5 +23,6 @@ if ((button == 1)); then
 else
 	TEXT=" <b>$PCT%</b>"
 fi
-printf '%s\n%s\n' "$TEXT" "$TEXT"
+echo "$TEXT
+$TEXT"
 ~/.config/i3blocks/colorcode $((100 - ${PCT%.*}))

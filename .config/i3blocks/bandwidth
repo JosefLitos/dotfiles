@@ -72,7 +72,7 @@ else
 	TEXT+="${tx_KiB}K"
 fi
 
-echo $TEXT
-echo $TEXT
+echo "$TEXT
+$TEXT"
 #divide by number of MB available on your connection
 ~/.config/i3blocks/colorcode $((100 - (rx_KiB * 10 / 48 > tx_KiB ? rx_KiB * 10 / 48 : tx_KiB) * 100 / 1024))

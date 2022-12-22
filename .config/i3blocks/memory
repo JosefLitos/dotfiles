@@ -49,6 +49,6 @@ elif [[ $button == 3 ]]; then
 else
 	TEXT="<b> $PCT%</b>"
 fi
-echo $TEXT
-echo $TEXT
+echo "$TEXT
+$TEXT"
 ~/.config/i3blocks/colorcode $((100 - ${PCT/.*/}))

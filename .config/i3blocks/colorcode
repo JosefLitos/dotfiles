@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
 # This is a color generator, use RGB for rainbow, RG for red-to-green, GruvRG for gruvbox accent, or
+[[ $(cat /sys/class/power_supply/BAT0/status) == Discharging ]] && exit 0
+
 # dummy for no effect, defaults to GruvRG
-if [[ -z $1 ]]; then
-	echo '#bd40b7' && exit 0
+if [[ ! $1 =~ ^[0-9]+$ ]]; then
+	echo '#bd40b7'
+	exit 0
 elif (($1 > 200 || $1 < 0)); then
 	declare -i x=0
 elif (($1 > 100)); then
@@ -17,7 +20,7 @@ fi
 #x scaled to [0-190] for avoiding edge-brightness colors
 
 # normal 0=red 100=green
-redtogreen() {
+rg() {
 	((x < 50)) && printf '#%02x%02x%02x\n' 220 $((x * 38 / 10 + 30)) 30 ||
 		printf '#%02x%02x%02x\n' $(((100 - x) * 38 / 10 + 30)) 220 30
 }
@@ -26,7 +29,7 @@ redtogreen() {
 # rgb(204,40,21)
 # 120 120 = 360
 # #cc2815 #cc6415 #cca015 #90a015 #54a015
-gruvRedToGreen() {
+gruvrg() {
 	if ((x < 50)); then
 		printf '#%02x%02x%02x\n' 204 $((x * 24 / 10 + 40)) 21
 	else
@@ -45,8 +48,8 @@ rainbow() {
 
 case "$2" in
 	"RGB") rainbow ;;
-	"RG") redtogreen ;;
-	"GruvRG") gruvRedToGreen ;;
+	"RG") rg ;;
+	"GruvRG") gruvrg ;;
 	"dummy") exit 0 ;;
-	*) [[ $(acpi) == *D* ]] || gruvRedToGreen ;;
+	*) gruvrg ;;
 esac

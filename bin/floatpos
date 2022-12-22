@@ -33,7 +33,7 @@ while read line; do
 done < <(swaymsg -t get_workspaces | sed -n 's/^.*"\(name\|focused\|type\|x\|y\|width\|height\)": \(.*\)/\2/p' | grep -A4 -F -e workspace -e true -e "$W" -e floating)
 
 if [[ -z $FLOAT ]]; then
-	if [[ $p2 == "shift" ]]; then
+	if [[ $p2 == shift ]]; then
 		case "$1" in
 			up | u) swaymsg focus up ;;
 			down | d) swaymsg focus down ;;

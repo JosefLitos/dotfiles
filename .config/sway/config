@@ -1,7 +1,7 @@
 set $mode tiling
 set $display eDP-1
-set $term $HOME/.config/sway/term
-set $screen output $display bg $(find ~/Pictures/screen/|shuf -n1) fill
+set $border 3
+set $screen output '*' bg $(find ~/Pictures/screen/|shuf -n1) fill
 set $Mod Mod4
 set $Alt Mod1
 

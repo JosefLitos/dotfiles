@@ -6,8 +6,8 @@ bindsym $Mod+g gaps inner current plus 5
 bindsym $Mod+Shift+g gaps inner current minus 5
 bindsym $Mod+$Alt+g gaps outer current plus 5
 bindsym $Mod+$Alt+Shift+g gaps outer current minus 5
-bindsym $Mod+t gaps inner current toggle 10
-bindsym $Mod+$Alt+t border toggle 2
+bindsym $Mod+t gaps inner current toggle 17
+bindsym $Mod+$Alt+t border toggle $border
 
 bindsym $Mod+u $screen
 bindsym $Mod+Shift+u exec imv -f Pictures/screen
@@ -21,18 +21,19 @@ bindsym $Mod+r exec rofi -show drun
 # bindsym $Alt+Tab exec rofi -show window
 
 # quick app starter
-bindsym $Mod+Return exec $term
+bindsym $Mod+Return exec term
 bindsym $Mod+1 exec W=$w8 lof "MOZ_ENABLE_WAYLAND=1 firefox-nightly" firefox-nightly
 bindsym $Mod+2 exec foot -dnone nvim
-bindsym $Mod+3 exec $term
+bindsym $Mod+3 exec term
+bindsym $Mod+4 exec lof ripcord Ripcord
 bindsym $Mod+5 exec W=$w5 lof netbeans NetBeans
 bindsym $Mod+7 exec W=$w7 lof gimp Gimp
 bindsym $Mod+8 exec W=$w6 lof "MOZ_ENABLE_WAYLAND=1 thunderbird" thunderbird
-bindsym $Mod+9 exec W=$w9 lof "tlauncher" "Minecraft.*"
-bindsym $Mod+e exec $term ranger
+bindsym $Mod+9 exec W=$w9 lof prismlauncher null "^Minecraft.*"
+bindsym $Mod+e exec term ranger
 bindsym $Mod+$Alt+e exec pcmanfm
 # managing/control
-bindsym Ctrl+Shift+Escape exec lof "$term htop" "st-256color" htop
+bindsym Ctrl+Shift+Escape exec term htop
 
 #------------------+
 # Win manipulation |
@@ -50,7 +51,7 @@ bindsym $Mod+space focus mode_toggle
 bindsym KP_Begin focus mode_toggle
 # change tiling layer
 bindsym $Mod+grave focus parent
-bindsym $Mod+Shift+asciitilde focus child
+bindsym $Mod+Shift+grave focus child
 
 ## Layout change
 bindsym $Mod+f fullscreen toggle
@@ -69,23 +70,22 @@ bindsym $Mod+minus scratchpad show
 #--------+
 # Arrows |
 #--------+
-set $floatpos ~/.config/sway/floatpos
 # floating mode, with tilling mode compatibility
-bindsym $Mod+Left exec $floatpos l
-bindsym $Mod+Down exec $floatpos d
-bindsym $Mod+Up exec $floatpos u
-bindsym $Mod+Right exec $floatpos r
-bindsym $Mod+Shift+c exec $floatpos c
+bindsym $Mod+Left exec floatpos l
+bindsym $Mod+Down exec floatpos d
+bindsym $Mod+Up exec floatpos u
+bindsym $Mod+Right exec floatpos r
+bindsym $Mod+Shift+c exec floatpos c
 # snap to side or focus in tiling mode
-bindsym $Mod+Shift+Left exec $floatpos l shift
-bindsym $Mod+Shift+Down exec $floatpos d shift
-bindsym $Mod+Shift+Up exec $floatpos u shift
-bindsym $Mod+Shift+Right exec $floatpos r shift
+bindsym $Mod+Shift+Left exec floatpos l shift
+bindsym $Mod+Shift+Down exec floatpos d shift
+bindsym $Mod+Shift+Up exec floatpos u shift
+bindsym $Mod+Shift+Right exec floatpos r shift
 # resize
-bindsym $Mod+$Alt+Left resize shrink width 80 or 4
-bindsym $Mod+$Alt+Down resize grow height 80 or 4
-bindsym $Mod+$Alt+Up resize shrink height 80 or 4
-bindsym $Mod+$Alt+Right resize grow width 80 or 4
+bindsym $Mod+$Alt+Left resize shrink width 4
+bindsym $Mod+$Alt+Down resize grow height 4
+bindsym $Mod+$Alt+Up resize shrink height 4
+bindsym $Mod+$Alt+Right resize grow width 4
 # focus workspace
 bindsym $Mod+Ctrl+Left workspace prev
 bindsym $Mod+Ctrl+Right workspace next
@@ -96,11 +96,16 @@ bindsym $Mod+Ctrl+Up move workspace back_and_forth, workspace back_and_forth
 #--------+
 # Keypad |
 #--------+
+# general movement
+bindsym Shift+KP_Left exec floatpos l
+bindsym Shift+KP_Down exec floatpos d
+bindsym Shift+KP_Up exec floatpos u
+bindsym Shift+KP_Right exec floatpos r
 # snap to side or focus in tiling mode
-bindsym Shift+KP_Left exec $floatpos l shift
-bindsym Shift+KP_Down exec $floatpos d shift
-bindsym Shift+KP_Up exec $floatpos u shift
-bindsym Shift+KP_Right exec $floatpos r shift
+bindsym KP_Left exec floatpos l shift
+bindsym KP_Down exec floatpos d shift
+bindsym KP_Up exec floatpos u shift
+bindsym KP_Right exec floatpos r shift
 
 #-----------+
 # Left Hand |
@@ -111,10 +116,10 @@ bindsym $Mod+s focus down
 bindsym $Mod+w focus up
 bindsym $Mod+d focus right
 # resize
-bindsym $Mod+$Alt+a resize shrink width 80 or 4
-bindsym $Mod+$Alt+s resize grow height 80 or 4
-bindsym $Mod+$Alt+w resize shrink height 80 or 4
-bindsym $Mod+$Alt+d resize grow width 80 or 4
+bindsym $Mod+$Alt+a resize shrink width 4
+bindsym $Mod+$Alt+s resize grow height 4
+bindsym $Mod+$Alt+w resize shrink height 4
+bindsym $Mod+$Alt+d resize grow width 4
 # move
 bindsym $Mod+Shift+a move left
 bindsym $Mod+Shift+s move down
@@ -188,11 +193,11 @@ bindsym --release Shift+KP_Insert output $display toggle
 mode $Exit {
 	bindsym c mode default, reload
 	bindsym e mode default, exec cpupower-gui pr Powersave && notify-send -t 1000 " Efficiency"
-	bindsym Shift+E mode default, exec $term sudo bash -c 'echo low-power > /sys/firmware/acpi/platform_profile'
-	bindsym a mode default, exec cpupower-gui pr Auto && notify-send -u low -t 1000 " Auto"
-	bindsym Shift+A mode default, exec $term sudo bash -c 'echo balanced > /sys/firmware/acpi/platform_profile'
-	bindsym w mode default, exec cpupower-gui pr Performance && notify-send -u critical -t 1000 " Performance"
-	bindsym Shift+P mode default, exec $term sudo bash -c 'echo performance > /sys/firmware/acpi/platform_profile'
+	bindsym Shift+E mode default, exec term sudo bash -c 'echo low-power > /sys/firmware/acpi/platform_profile'
+	bindsym a mode default, exec cpupower-gui pr Optimal && notify-send -u low -t 1000 " Auto"
+	bindsym Shift+A mode default, exec term sudo bash -c 'echo balanced > /sys/firmware/acpi/platform_profile'
+	bindsym w mode default, exec cpupower-gui pr Auto && notify-send -u critical -t 1000 " Performance"
+	bindsym Shift+P mode default, exec term sudo bash -c 'echo performance > /sys/firmware/acpi/platform_profile'
 	bindsym --release d mode default, exec $softDisplay
 	bindsym --release Shift+d mode default, output $display toggle
 	bindsym q exit
@@ -201,8 +206,8 @@ mode $Exit {
 		systemctl hibernate && sleep 60 && sudo swapoff /swapfile
 	bindsym p exec poweroff
 	bindsym r exec reboot
-	bindsym Shift+w mode default; exec $term sudo bash -c 'efibootmgr -n 0005 && reboot'
-	bindsym b mode default, exec $term sudo bash -c \
+	bindsym Shift+w mode default; exec term sudo bash -c 'efibootmgr -n 0005 && reboot'
+	bindsym b mode default, exec term sudo bash -c \
 	'f=/sys/bus/platform/drivers/ideapad_acpi/VPC2004:00/conservation_mode && echo $((($(cat \
 	$f)+1)%2)) > $f && (($(cat $f)==0)) && echo Full Charge || echo Conservation mode && sleep 1'
 	bindsym Escape mode default
@@ -233,7 +238,7 @@ bindsym $Mod+n exec $barsig kb
 bindsym $Alt+Escape exec $barsig kb
 
 # Disk connection management
-bindsym $Mod+$Alt+p exec $term -e bashmount
+bindsym $Mod+$Alt+p exec term -e bashmount
 # poweroff and eject any connected device (udisksctl power-off -b /dev/sdx0)
 
 # Change gamma, "redshift" manually - n for night
@@ -273,28 +278,30 @@ bindsym Shift+KP_Divide exec $barsig vol toggle
 bindsym Shift+KP_Multiply exec $barsig mic toggle
 
 # Media management
-bindsym $Mod+i exec notify-send -u low -a info -h int:value:$((100*$(playerctl --player=mpv metadata\
- --format '{{position}}/{{mpris:length}}'))) "$(playerctl metadata --player=mpv --format '{{title}}')"
+bindsym $Mod+Ctrl+t exec twitch
+set $mpv playerctl --player=mpv
+bindsym $Mod+i exec notify-send -u low -a info -h int:value:$((100*$($mpv metadata\
+ --format '{{position}}/{{mpris:length}}'))) "$(playerctl metadata --player=mpv --format '{{artist}} - {{title}}' | sed 's/^ - //')"
 bindsym $Mod+m exec songselect &
-bindsym $Mod+Ctrl+m exec songselect auto &
-bindsym $Mod+$Alt+Ctrl+m exec dir="$HOME/Music/$(sed 's/\(.*\)\/.*/\1/' /tmp/song)"\
- && rm /tmp/song && playerctl --player=mpv stop && sleep 1 && rndMusic "$dir"
-bindsym $Mod+$Alt+m exec $term -e ranger --selectfile="$HOME/Music/$(cat /tmp/song)"
-bindsym $Mod+Shift+m exec rm /tmp/song && playerctl --player=mpv stop
-bindsym Shift+XF86AudioStop exec rm /tmp/song && playerctl --player=mpv stop
-bindsym Shift+XF86AudioNext exec playerctl --player=mpv stop
-bindsym XF86AudioPlay exec "playerctl --player=mpv,vlc play-pause"
-bindsym KP_Subtract exec playerctl --all-players play-pause
-bindsym F12 exec playerctl --all-players play-pause
-bindsym XF86AudioNext exec "playerctl --player=mpv,vlc next"
-bindsym XF86AudioPrev exec "playerctl --player=mpv,vlc prev"
-bindsym XF86AudioStop exec playerctl --all-players pause
+bindsym $Mod+Ctrl+m exec songselect mpv &
+bindsym $Mod+$Alt+Ctrl+m exec songselect play "$(playerctl metadata --player=mpv --format \
+'{{xesam:url}}' | urlencode -d | sed 's/file:\/\/\(.*\)\/[^/]*/\1/')"
+bindsym $Mod+$Alt+m exec term -e ranger --selectfile="$(playerctl metadata --player=mpv --format \
+'{{xesam:url}}' | urlencode -d | sed 's/file:\/\///')"
+bindsym $Mod+Shift+m exec killall mpv
+bindsym Shift+XF86AudioStop exec killall mpv
+bindsym XF86AudioPlay exec $mpv play-pause
+bindsym KP_Subtract exec playerctl -a play-pause
+bindsym $Mod+$Alt+space exec playerctl -a play-pause
+bindsym XF86AudioNext exec [[ -f /tmp/song ]] && $mpv next || $mpv stop
+bindsym XF86AudioPrev exec $mpv prev
+bindsym XF86AudioStop exec playerctl -a pause
 
-bindsym $Mod+h exec "playerctl --player=mpv,vlc position 5-"
-bindsym Ctrl+KP_Left exec "playerctl --player=mpv,vlc position 5-"
-bindsym $Mod+l exec "playerctl --player=mpv,vlc position 5+"
-bindsym Ctrl+KP_Right exec "playerctl --player=mpv,vlc position 5+"
-bindsym $Mod+j exec "playerctl --player=mpv,vlc position 30-"
-bindsym Ctrl+KP_Up exec "playerctl --player=mpv,vlc position 30-"
-bindsym $Mod+k exec "playerctl --player=mpv,vlc position 30+"
-bindsym Ctrl+KP_Down exec "playerctl --player=mpv,vlc position 30+"
+bindsym $Mod+h exec $mpv position 5-
+bindsym Ctrl+KP_Left exec $mpv position 5-
+bindsym $Mod+l exec $mpv position 5+
+bindsym Ctrl+KP_Right exec $mpv position 5+
+bindsym $Mod+j exec $mpv position 30-
+bindsym Ctrl+KP_Up exec $mpv position 30-
+bindsym $Mod+k exec $mpv position 30+
+bindsym Ctrl+KP_Down exec $mpv position 30+

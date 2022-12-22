@@ -19,6 +19,7 @@ else
 	TEXT=" <b>$temp°C</b>"
 fi
 
-printf '%s\n%s\n' "$TEXT" "$TEXT"
+echo "$TEXT
+$TEXT"
 # temp-30 because lowest temp is practically 30° C
 ~/.config/i3blocks/colorcode $((100 - (temp - 30) * 10 / 7))
