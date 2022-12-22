@@ -1,9 +1,14 @@
--- https://github.com/sumneko/lua-language-server/wiki/Build-and-Run-(Standalone)
-lsp_setup("sumneko_lua", {
-	settings = {
-		Lua = {
-			diagnostics = {globals = {"vim"}},
-			-- workspace = {library = {["~/.local/share/nvim/site/pack/packer/start/"] = true}},
+require'neodev'.setup {setup_jsonls = false, lspconfig = false}
+return function()
+	return "sumneko_lua", {
+		settings = {
+			Lua = {
+				telemetry = {enable = false},
+				runtime = {version = "LuaJIT"},
+				diagnostics = {globals = {"vim"}},
+				workspace = {checkThirdParty = false},
+			},
 		},
-	},
-})
+		before_init = require'neodev.lsp'.before_init,
+	}
+end

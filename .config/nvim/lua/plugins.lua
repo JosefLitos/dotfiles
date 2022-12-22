@@ -1,75 +1,110 @@
-DATA_PATH = vim.fn.stdpath 'data'
-local install_path = DATA_PATH .. "/site/pack/packer/start/"
-local install_packer
+local packer = require "packer"
+packer.init {disable_commands = true}
+local use = packer.use
+packer.reset()
 
-if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
-	install_packer = vim.fn.system {
-		"git",
-		"clone",
-		"--depth",
-		"1",
-		"https://github.com/wbthomason/packer.nvim",
-		install_path .. "packer.nvim",
-	}
-	vim.cmd "packadd packer.nvim"
-end
+vim.keymap.set("n", "<Leader>u", "<NOP>")
+-- Packer can manage itself as an optional plugin
+use {
+	"wbthomason/packer.nvim",
+	config = [[require'plugins'.sync()]],
+	keys = {{"n", "<Leader>u"}},
+}
 
-require'packer'.startup(function(use)
-	-- Packer can manage itself as an optional plugin
-	use {
-		"wbthomason/packer.nvim",
-		config = function()
-			nmap("n", "<Leader>u", "<Cmd>PackerUpdate<CR>")
-			nmap("n", "<Leader>p", "<Cmd>PackerSync<CR>")
-		end,
-	}
+-- Nvim ui
+use {
+	"JosefLitos/nerdcontrast.nvim",
+	config = function()
+		local time = tonumber(os.date("%H"))
+		local month = tonumber(os.date("%m"))
+		if month > 6 then month = 12 - month end
+		month = math.floor(month / 2)
+		vim.o.background = (time > 7 - month and time < 16 + month) and "light" or "dark"
+		vim.g.bg_none = vim.o.background == "dark"
+		vim.cmd.colorscheme "nerdcontrast"
+		require "ui"
+	end,
+}
+use {"kyazdani42/nvim-web-devicons", after = "nerdcontrast.nvim"}
+use {"goolord/alpha-nvim", config = [[require "alpha-s"]], after = "nerdcontrast.nvim"}
+use {"feline-nvim/feline.nvim", config = [[require "feline-s"]], after = "nerdcontrast.nvim"}
+use {"romgrk/barbar.nvim", config = [[require "barbar-s"]], event = "User Initialized"}
+-- Explorer
+use {"kevinhwang91/rnvimr", config = [[require "rnvimr-s"]]}
+use {
+	"kyazdani42/nvim-tree.lua",
+	config = [[require "nvimtree-s"]],
+	keys = {{"n", "E"}, {"n", "<M-Tab>"}},
+}
+use {"ibhagwan/fzf-lua", event = "User Initialized", config = [[require "fzf-s"]]}
 
-	use "JosefLitos/nerdcontrast.nvim"
+-- Autocomplete
+use {
+	"hrsh7th/nvim-cmp",
+	config = [[require "cmp-s"]],
+	event = "InsertEnter",
+	requires = {
+		{"L3MON4D3/LuaSnip", event = "User Initialized"},
+		{"rafamadriz/friendly-snippets", event = "User Initialized"},
+		{"hrsh7th/cmp-nvim-lsp", event = "User Initialized"},
+		{after = "nvim-cmp", "saadparwaiz1/cmp_luasnip"},
+		{after = "nvim-cmp", "hrsh7th/cmp-cmdline"},
+		{after = "nvim-cmp", "hrsh7th/cmp-path"},
+		{after = "nvim-cmp", "hrsh7th/cmp-calc"},
+		{after = "nvim-cmp", "hrsh7th/cmp-emoji"},
+		{after = "nvim-cmp", "hrsh7th/cmp-buffer"},
+		{after = "nvim-cmp", "kdheepak/cmp-latex-symbols"},
+		{after = "nvim-cmp", "windwp/nvim-autopairs", config = [[require "autopairs-s"]]},
+	},
+}
+use {"folke/neodev.nvim", config = [[require 'lsp'(require 'lsp.lua-ls'())]], ft = "lua"}
+use {"mfussenegger/nvim-jdtls", config = [[require "lsp.jdtls"]], ft = "java"}
+-- use {"SmiteshP/nvim-navic", event = "User Initialized", config=[[navic()]]}
+use {
+	"ray-x/lsp_signature.nvim",
+	config = [[require'lsp_signature'.setup {floating_window = false, hint_prefix = " "}]],
+	after = "nvim-lspconfig",
+}
+-- Formatting
+use {
+	"jose-elias-alvarez/null-ls.nvim",
+	config = [[require "lsp.null-ls"]],
+	after = "plenary.nvim",
+	requires = {
+		{"neovim/nvim-lspconfig", config = [[require "lsp"]], after = "cmp-nvim-lsp"},
+		{"nvim-lua/plenary.nvim", event = "User Initialized"},
+	},
+}
+-- Debugging
+use {
+	"rcarriga/nvim-dap-ui",
+	config = [[require "dap-s"]],
+	after = "nvim-dap",
+	requires = {"mfussenegger/nvim-dap", ft = {"c", "cpp", "rust", "java"}},
+}
+-- Syntax highlighting
+use {
+	"nvim-treesitter/nvim-treesitter",
+	run = ":TSUpdate",
+	config = [[require "treesitter-s"]],
+	requires = {"windwp/nvim-ts-autotag", after = "nvim-treesitter"},
+	event = "User Initialized",
+}
+-- use {"nvim-treesitter/playground", config = [[require "playground-s"]], after = "nvim-treesitter"}
+use {"JosefLitos/vim-i3config", event = "User Initialized"}
 
-	use {"neovim/nvim-lspconfig", config = function() require "lsp" end}
-	use {
-		"williamboman/nvim-lsp-installer",
-		config = function() require "lsp.emmet-ls" end,
-		after = "nvim-lspconfig",
-	}
-	use {"tami5/lspsaga.nvim", config = function() require'lspsaga'.init_lsp_saga() end}
-
-	-- Telescope
-	use "nvim-lua/popup.nvim"
-	use "nvim-lua/plenary.nvim"
-	use {"nvim-telescope/telescope.nvim", config = function() require "telescope-s" end}
-
-	-- Debugging
-	-- add("mfussenegger", "nvim-dap")
-
-	-- Autocomplete
-	use {
-		"hrsh7th/nvim-cmp",
-		config = function() require "cmp-s" end,
-		requires = {
-			-- "dsznajder/vscode-es7-javascript-react-snippets",
-			"rafamadriz/friendly-snippets",
-			"L3MON4D3/LuaSnip",
-			"saadparwaiz1/cmp_luasnip",
-			"hrsh7th/cmp-nvim-lsp",
-			"hrsh7th/cmp-cmdline",
-			"hrsh7th/cmp-nvim-lua",
-			"hrsh7th/cmp-path",
-			"hrsh7th/cmp-calc",
-			"hrsh7th/cmp-emoji",
-			"hrsh7th/cmp-buffer",
-			"kdheepak/cmp-latex-symbols",
-		},
-	}
-	use {"windwp/nvim-autopairs", after = "nvim-cmp", config = function() require "autopairs-s" end}
-	use {
-		"nvim-treesitter/nvim-treesitter",
-		run = ":TSUpdate",
-		config = function() require "treesitter-s" end,
-		requires = {"windwp/nvim-ts-autotag"},
-	}
-
-	use {
+-- Nice To Have
+use {
+	"lukas-reineke/indent-blankline.nvim",
+	config = [[require'indent_blankline'.setup {use_treesitter = true, use_treesitter_scope = true}]],
+	event = "User Initialized",
+}
+use {"pierreglaser/folding-nvim", event = "User Initialized"}
+use {"numToStr/Comment.nvim", config = [[require "comment-s"]], event = "User Initialized"}
+use {"rrethy/vim-hexokinase", run = "make hexokinase", config = [[require "hexokinase-s"]]}
+use "LunarVim/bigfile.nvim"
+-- use {'lewis6991/gitsigns.nvim', config = [[require('gitsigns').setup()]]}
+--[[ use {
 		"rubixninja314/vim-mcfunction",
 		ft = "mcfunction",
 		config = function()
@@ -77,63 +112,36 @@ require'packer'.startup(function(use)
 			vim.g.mcEnableBuiltinIDs = false
 			vim.g.mcEnableBuiltinJSON = false
 		end,
-	}
+	} ]]
 
-	-- use {
-	-- 	"lervag/vimtex",
-	-- 	config = function()
-	-- 		vim.g.vimtex_indent_enabled = 0
-	-- 		vim.g.vimtex_indent_bib_enabled = 0
-	-- 		vim.g.vimtex_fold_enabled = 1
-	-- 		vim.g.vimtex_fold_types = {markers = {enabled = 0}, sections = {parse_levels = 1}}
-	-- 	end,
-	-- }
+use {
+	"folke/noice.nvim",
+	disable = true,
+	config = function()
+		require'noice'.setup {
+			lsp = {
+				-- override markdown rendering so that **cmp** and other plugins use **Treesitter**
+				override = {
+					["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+					["vim.lsp.util.stylize_markdown"] = true,
+					["cmp.entry.get_documentation"] = true,
+				},
+			},
+			-- you can enable a preset for easier configuration
+			presets = {
+				bottom_search = true, -- use a classic bottom cmdline for search
+				command_palette = true, -- position the cmdline and popupmenu together
+				long_message_to_split = true, -- long messages will be sent to a split
+				inc_rename = false, -- enables an input dialog for inc-rename.nvim
+				lsp_doc_border = false, -- add a border to hover docs and signature help
+			},
+		}
+	end,
+	after = "nvim-notify",
+	requires = {
+		{"MunifTanjim/nui.nvim", event = "User Initialized"},
+		{"rcarriga/nvim-notify", after = "nui.nvim"},
+	},
+}
 
-	-- Formatting
-	use {"jose-elias-alvarez/null-ls.nvim", config = function() require "lsp.null-ls" end}
-	use {
-		"pierreglaser/folding-nvim",
-		config = function()
-			nmap("n", "-", "za")
-			nmap("i", "<C-S-_>", "<Esc>zcja")
-			nmap("n", "=", "zi")
-			nmap("n", "_", "zM")
-			nmap("n", "+", "zR")
-		end,
-	}
-	use {"numToStr/Comment.nvim", config = function() require "comment-s" end}
-
-	-- Explorer
-	use {"kevinhwang91/rnvimr", config = function() require "rnvimr-s" end}
-	use {"kyazdani42/nvim-tree.lua", config = function() require "nvimtree-s" end}
-
-	-- Color
-	use {
-		"rrethy/vim-hexokinase",
-		run = "make hexokinase",
-		config = function() require "hexokinase-s" end,
-	}
-	use "JosefLitos/vim-i3config"
-
-	-- use {'lewis6991/gitsigns.nvim', config = function() require('gitsigns').setup() end}
-
-	-- Nvim ui
-	use "kyazdani42/nvim-web-devicons"
-	use {"mhinz/vim-startify", config = function() require "startify-s" end}
-	use {"NTBBloodbath/galaxyline.nvim", config = function() require "galaxyline-s" end}
-	use {
-		"romgrk/barbar.nvim",
-		config = function()
-			vim.cmd "packadd barbar.nvim"
-			require "barbar-s"
-		end,
-	}
-	use {
-		"lukas-reineke/indent-blankline.nvim",
-		config = function() require'indent_blankline'.setup {char_highlight_list = {"Grey"}} end,
-	}
-
-	-- Automatically set up your configuration after cloning packer.nvim
-	-- Put this at the end after all plugins
-	if install_packer then require'packer'.sync() end
-end)
+return packer

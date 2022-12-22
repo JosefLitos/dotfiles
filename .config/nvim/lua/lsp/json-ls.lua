@@ -1,12 +1,3 @@
-lsp_setup("cssls", {cmd = {"vscode-css-language-server", "--stdio"}})
--- lsp_setup("eslint",
--- {cmd = {"vscode-eslint-language-server", "--stdio"}, settings = {documentFormatting = true}})
---				install eslint separately, then run `eslint --install` in your project
-lsp_setup("html", {
-	cmd = {"vscode-html-language-server", "--stdio"},
-	settings = {documentFormatting = true},
-})
-
 -- Find more schemas for JSONls here: https://www.schemastore.org/json/
 local schemas = {
 	{
@@ -125,7 +116,9 @@ local schemas = {
 	},
 }
 
-lsp_setup("jsonls", {
-	cmd = {"vscode-json-language-server", "--stdio"},
-	settings = {json = {schemas = schemas}, documentFormatting = false},
-})
+return function()
+	return "jsonls", {
+		cmd = {"vscode-json-language-server", "--stdio"},
+		settings = {json = {schemas = schemas}, documentFormatting = false},
+	}
+end

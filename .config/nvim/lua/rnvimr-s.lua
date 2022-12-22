@@ -13,8 +13,13 @@ vim.g.rnvimr_layout = {
 }
 
 -- Rnvimr yw: current dir to Neovim's cwd; gw: goto Neovim's cwd
-nmap("n", "<C-o>", "<Cmd>RnvimrToggle<CR>")
-nmap("n", "R", "<Cmd>RnvimrToggle<CR>")
-automap("t", "rnvimr", "<M-e>", "<Cmd>RnvimrToggle<CR>")
-automap("t", "rnvimr", "<C-Esc>", "<Cmd>RnvimrToggle<CR>")
-automap("t", "rnvimr", "<C-q>", "q")
+vim.keymap.set("n", "<C-o>", "<Cmd>RnvimrToggle<CR>")
+vim.keymap.set("n", "R", "<Cmd>RnvimrToggle<CR>")
+
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = "rnvimr",
+	callback = function()
+		vim.keymap.set("t", "<C-Esc>", "<Cmd>RnvimrToggle<CR>", {buffer = true})
+		vim.keymap.set("t", "<C-q>", "q", {buffer = true})
+	end,
+})

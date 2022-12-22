@@ -2,17 +2,7 @@
 # This I use for my own use, simply put, it installs all the packages I need and puts all theme
 # files where I want them. Use only as the user on the machine who you want to affect
 
-if [[ $PWD == *dotfiles* ]]; then
-	while [[ $PWD != *dotfiles ]]; do
-		if [[ $PWD == *dotfiles* ]]; then
-			cd ..
-		else
-			cd dotfiles
-		fi
-	done
-else
-	cd ${0%/bin/install.sh}
-fi
+cd ${0%/bin/install.sh}
 
 if [[ ! $(which paru) ]]; then
 	sudo pacman --needed -S git base-devel cargo
@@ -29,17 +19,28 @@ neovim() {
 bash-language-server
 clang
 eslint
+jdtls
 lua-format
 lua-language-server
 pandoc-bin
 prettier
 pyright
-shellcheck
 shfmt
-typescript-language-server
 vscode-langservers-extracted
-yaml-language-server
 yapf')
+	local CWD=$PWD
+	JAVA_HOME=/usr/lib/jvm/default-runtime/
+	export JAVA_HOME
+	cd ~/.local/share/
+	git clone https://github.com/microsoft/java-debug
+	cd java-debug
+	./mvnw clean install
+	cd ..
+	git clone https://github.com/microsoft/vscode-java-test
+	cd vscode-java-test
+	npm install
+	npm run build-plugin
+	cd $CWD
 }
 
 # installs packages for latex
@@ -62,13 +63,13 @@ basics() {
 	printf '\nInstalling basics.\n'
 	paru --needed -S $(printf '
 acpi
-acpid
 alsa-utils
 arandr
 arp-scan
 bc
 bashmount
 bat
+bat-extras
 dragon-drop
 dunst
 engrampa
@@ -93,12 +94,13 @@ mpv-mpris
 neofetch
 neovim
 net-tools
-network-manager-applet
 nerd-fonts-inconsolata
 networkmanager
+nm-connection-editor
 npm
 ntfs-3g
 openssh
+otf-font-awesome
 otf-overpass
 p7zip
 pacman-contrib
@@ -108,7 +110,6 @@ pipewire-pulse
 playerctl
 pulsemixer
 python-pynvim
-qt5ct
 ranger
 redshift
 reflector
@@ -127,18 +128,15 @@ ttf-nova
 udisks2
 ueberzug
 ufw
+urlencode
 wget
 wireplumber
 wl-clipboard
 wlsunset
 xdg-desktop-portal-wlr
+xorg-xhost
 xorg-xwayland
 yt-dlp')
-	wget https://archive.archlinux.org/packages/o/otf-font-awesome/otf-font-awesome-5.15.4-1-any.pkg.tar.zst
-	paru --noconfirm -U otf-font-awesome*
-	rm otf-font-awesome*
-	git clone https://github.com/JosefLitos/st.git && cd st && sudo make clean install && cd .. &&
-		rm -rf st
 	sudo ln -s $PWD/bin/* /usr/local/bin/ && {
 		sudo rm /usr/local/bin/install.sh
 		sudo rm /usr/local/bin/backlight
@@ -146,8 +144,6 @@ yt-dlp')
 		sudo chown root:root /usr/local/bin/backlight && sudo chmod +s /usr/local/bin/backlight
 		sudo systemctl enable NetworkManager
 		sudo systemctl enable ufw.service
-		sudo systemctl enable acpid
-		sudo ln -s $PWD/other/etc-acpi-handler.sh /etc/acpi/handler.sh
 		sudo rm -r /var/log/journal
 		bat cache --build
 	}
@@ -158,16 +154,16 @@ guis() {
 	printf '\nInstalling GUI applications.\n'
 	paru --needed -S $(printf '
 cpupower-gui
-firefox
+firefox-nightly
 gimp
-inkscape
 jdk-openjdk
-jdk8-openjdk
-kdenlive-appimage
 netbeans
 scrcpy
 thunderbird
-transmission-gtk')
+transmission-gtk
+qt6-wayland
+qt6ct
+prismlanucher-bin')
 }
 
 configs() {
@@ -182,10 +178,6 @@ configs() {
 	rm ~/.config/pulse
 	mkdir ~/.config/pulse
 	ln -s $PWD/pulse/* ~/.config/pulse/
-	rm ~/.config/nvim
-	mkdir ~/.config/nvim
-	mkdir ~/.config/nvim/.git
-	ln -s $PWD/nvim/* ~/.config/nvim/
 	cd ..
 }
 
@@ -202,7 +194,7 @@ sysFiles() {
 	sudo bash -c 'printf "EDITOR=nvim\nQT_QPA_PLATFORMTHEME=qt5ct\nPAGER=bat\n" > /etc/environment'
 	if [[ -z $(cat /etc/hostname 2> /dev/null) ]]; then
 		read -p 'Pick a system/host name: ' hostname
-		while [[ $hostname == *" "* ]]; do
+		while [[ $hostname =~ ' ' ]]; do
 			read -p 'Pick a 1 word hostname: ' hostname
 		done
 	else
@@ -215,7 +207,7 @@ sysFiles() {
 	sudo bash -c 'printf "'$hostname'" > /etc/hostname'
 	sudo bash -c 'printf "\n127.0.0.1 localhost\n::1 localhost\n127.0.1.1
 	'$hostname'.localdomain '$hostname'" > /etc/hosts'
-	sudo sed -i 's/#Color/Color\nILoveCandy/;s/.*IgnorePkg *= *\(.*\)/IgnorePkg = \1 otf-font-awesome/;s/.*ParallelDownloads.*/ParallelDownloads=8/' /etc/pacman.conf
+	sudo sed -i 's/#Color/Color\nILoveCandy/;s/.*ParallelDownloads.*/ParallelDownloads=8/' /etc/pacman.conf
 	paru -Sy
 	sudo bash -c 'mkdir /etc/systemd/system/getty@tty1.service.d; sed "s/kepis/'$USER'/" \
 	other/etc-systemd-system-getty@tty1.service.d-override.conf > \

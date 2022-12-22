@@ -3,7 +3,6 @@ require'nvim-autopairs'.setup {
 	ts_config = {
 		lua = {"string"}, -- it will not add pair on that treesitter node
 		javascript = {"template_string"},
-		java = false,
 	},
 	disable_filetype = {"TelescopePrompt", "spectre_panel", "rnvimr", "NvimTree"},
 	fast_wrap = {
@@ -14,11 +13,12 @@ require'nvim-autopairs'.setup {
 		end_key = "$",
 		keys = "qwertyuiopzxcvbnmasdfghjkl",
 		check_comma = true,
-		highlight = "PmenuSel",
+		highlight = "Search",
 		highlight_grey = "LineNr",
 	},
 }
 
-require'cmp'.event:on("confirm_done", require'nvim-autopairs.completion.cmp'.on_confirm_done {
-	map_char = {tex = ""},
-})
+local on_confirm_done = require'nvim-autopairs.completion.cmp'.on_confirm_done
+local cmp = require 'cmp'
+cmp.event:on("confirm_done", on_confirm_done)
+cmp.event:off("confirm_done", on_confirm_done)

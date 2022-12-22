@@ -1,7 +1,6 @@
 local nls = require "null-ls"
 
 -- local h = require("null-ls.helpers")
-
 nls.setup({
 	-- single_file_support = true,
 	-- init_options = {documentFormatting = true, codeAction = true},
@@ -24,34 +23,40 @@ nls.setup({
 			},
 		},
 		nls.builtins.formatting.prettier.with {
-			filetypes = {
-				"javascript",
-				"javascriptreact",
-				"typescript",
-				"typescriptreact",
-				-- "vue",
-				"css",
-				"scss",
-				"less",
-				-- "html",
-				"json",
-				"yaml",
-				"markdown",
-				"graphql",
-			},
 			extra_args = {
 				"--print-width=" .. vim.o.textwidth,
 				(vim.o.expandtab or "--use-tabs"),
+				"--tab-width=" .. vim.o.tabstop,
 				"--no-semi",
+				"--prose-wrap=always",
 			},
 		},
 		nls.builtins.formatting.shfmt.with {
 			extra_args = {"-ci", "-s", "-sr", "-i", (vim.o.expandtab and vim.o.tabstop or 0)},
 		},
 		nls.builtins.formatting.clang_format.with {
-			extra_args = {"--style", "{UseTab: Always, TabWidth: 2}"},
+			-- filetypes = {"c", "cpp", "h", "java"},
+			extra_args = {
+				"--style",
+				({
+					vim.inspect({
+						ColumnLimit = vim.o.textwidth,
+						TabWidth = vim.o.tabstop,
+						UseTab = vim.o.expandtab and "Never" or "ForIndentation",
+						AllowAllParametersOfDeclarationOnNextLine = true,
+						AllowShortIfStatementsOnASingleLine = "AllIfsAndElse",
+						AllowShortLambdasOnASingleLine = "All",
+						AllowShortLoopsOnASingleLine = true,
+						AllowShortBlocksOnASingleLine = "Empty",
+						AllowShortFunctionsOnASingleLine = "None",
+						BreakBeforeBraces = "Attach",
+						AlignOperands = "DontAlign",
+						IndentCaseBlocks = false,
+						IndentCaseLabels = false,
+					}):gsub(" =", ":"),
+				})[1],
+			},
 		},
-		-- nls.builtins.diagnostics.shellcheck,
 		-- nls.builtins.code_actions.shellcheck,
 		-- nls.builtins.diagnostics.eslint,
 		nls.builtins.code_actions.eslint,

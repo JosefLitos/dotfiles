@@ -1,45 +1,36 @@
-function _G.lsp_setup(server, opts)
-	opts.handlers = {
-		["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
-			virtual_text = false,
-			signs = true,
-			underline = true,
-			update_in_insert = true,
-			severity_sort = true,
-			float = {
-				focusable = false,
-				style = "minimal",
-				border = "rounded",
-				source = "always",
-				header = "",
-				prefix = "",
-			},
-		}),
-		["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {border = "rounded"}),
-	}
+vim.diagnostic.config {
+	virtual_text = false,
+	signs = true,
+	underline = true,
+	update_in_insert = false,
+	severity_sort = true,
+	float = {focusable = false, border = "rounded", source = "always"},
+}
+vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover,
+		{border = "rounded"})
+
+local capabilities = require'cmp_nvim_lsp'.default_capabilities()
+local function setup(server, opts)
+	if not opts then opts = {} end
 	local on_attach = opts.on_attach
-	if not opts.capabilities then opts.capabilities = capabilities end
+	if not opts.capabilities then
+		opts.capabilities = capabilities
+	else
+		opts.capabilities = vim.tbl_deep_extend("force", opts.capabilities, capabilities)
+	end
 	opts.on_attach = function(client, bufnr)
+		if vim.api.nvim_buf_get_option(bufnr, "bufhidden") ~= "" then
+			vim.schedule(function() vim.lsp.buf_detach_client(bufnr, client.id) end)
+			return
+		end
 		if on_attach then on_attach(client, bufnr) end
 		if opts.folding then require'folding'.on_attach() end
 		client.server_capabilities.documentFormattingProvider = (opts.settings and
 				                                                        opts.settings.documentFormatting)
-		vim.cmd "setlocal formatoptions-=cro"
-		if client.server_capabilities.documentHighlightProvider then
-			vim.api.nvim_create_augroup("lsp_document_highlight", {clear = true})
-			vim.api.nvim_clear_autocmds {buffer = bufnr, group = "lsp_document_highlight"}
-			vim.api.nvim_create_autocmd("CursorHold", {
-				callback = vim.lsp.buf.document_highlight,
-				buffer = bufnr,
-				group = "lsp_document_highlight",
-			})
-			vim.api.nvim_create_autocmd("CursorMoved", {
-				callback = vim.lsp.buf.clear_references,
-				buffer = bufnr,
-				group = "lsp_document_highlight",
-			})
-			vim.opt_local.signcolumn = "yes"
-		end
+		vim.bo.formatoptions = "tcqjl1"
+		vim.wo.signcolumn = "number"
+		local ok, navic = pcall(require, "nvim-navic")
+		if ok then navic.attach(client, bufnr) end
 	end
 	require'lspconfig'[server].setup(opts)
 end
@@ -53,22 +44,38 @@ vim.fn.sign_define("DiagnosticSignHint",
 vim.fn.sign_define("DiagnosticSignInfo",
 		{texthl = "DiagnosticInfo", text = "", numhl = "DiagnosticInfo"})
 
-lsp_setup("bashls", {})
-lsp_setup("clangd", {capabilities = {offsetEncoding = 'utf-16'}})
--- require "lsp.go-ls"
-require "lsp.js-ts-ls"
--- lsp_setup("texlab", {})
-require "lsp.tex-ls"
-require "lsp.lua-ls"
-lsp_setup("pyright", {})
-lsp_setup("rust_analyzer", {settings = {documentFormatting = true}})
+setup "bashls"
+setup("clangd", {capabilities = {offsetEncoding = 'utf-16'}})
+-- require "lsp.js-ts-ls"
+setup "pyright"
+setup("rust_analyzer", {settings = {documentFormatting = true}})
+setup(require 'lsp.tex-ls'())
+-- lsp_setup "texlab"
 -- require "lsp.tailwindcss-ls"
-require "lsp.vscode-ls"
-lsp_setup("yamlls", {})
+-- setup("cssls", {cmd = {"vscode-css-language-server", "--stdio"}})
+-- setup("html",
+-- {cmd = {"vscode-html-language-server", "--stdio"}, settings = {documentFormatting = true}})
+-- setup(require "lsp.json-ls"())
+-- setup "yamlls"
 
--- LSP general code actions
-nmap({"n", "i"}, "<M-g>", function()
-	for _, s in ipairs(vim.lsp.get_active_clients()) do
+local map = vim.keymap.set
+-- Lsp diagnostic
+map({"n", "i"}, "<M-d>", vim.diagnostic.open_float)
+map({"n", "i"}, "<M-N>", vim.diagnostic.goto_prev)
+map({"n", "i"}, "<M-n>", vim.diagnostic.goto_next)
+-- Lsp code helpers
+map("n", "gD", vim.lsp.buf.declaration)
+map("n", "gd", vim.lsp.buf.definition)
+map("n", "gr", vim.lsp.buf.references)
+map("n", "gi", vim.lsp.buf.implementation)
+map({"n", "i"}, "<M-i>", vim.lsp.buf.hover)
+map("n", "ca", vim.lsp.buf.code_action)
+map("i", "<M-c>", vim.lsp.buf.code_action)
+map({"n", "i"}, "<C-r>", vim.lsp.buf.rename)
+map({"n", "i"}, "<F2>", vim.lsp.buf.rename)
+
+map({"n", "i"}, "<M-g>", function()
+	for _, s in ipairs(vim.lsp.get_active_clients({bufnr = 0})) do
 		if s.server_capabilities.definitionProvider and s.name ~= "bashls" then
 			vim.lsp.buf.definition()
 			return
@@ -83,27 +90,8 @@ nmap({"n", "i"}, "<M-g>", function()
 	vim.cmd('e ' .. path:gsub('~', os.getenv('HOME')))
 	vim.loop.chdir(cwd)
 end)
-nmap("n", "gD", vim.lsp.buf.declaration)
-nmap("n", "gd", vim.lsp.buf.definition)
-nmap("n", "gr", vim.lsp.buf.references)
-nmap("n", "gi", vim.lsp.buf.implementation)
-nmap({"n", "i"}, "<C-r>", vim.lsp.buf.rename)
-nmap("n", "<F2>", "<Cmd>Lspsaga rename<CR>")
-nmap("i", "<F2>", "<C-o><Cmd>Lspsaga rename<CR>")
-nmap({"n", "i"}, "<M-i>", vim.lsp.buf.hover)
-nmap({"n", "i"}, "<M-s>", "<Cmd>Lspsaga signature_help<CR>")
-nmap("i", "<C-S-Space>", "<Cmd>Lspsaga signature_help<CR>")
--- Lsp diagnostic
-nmap({"n", "i"}, "<M-d>", "<Cmd>Lspsaga show_line_diagnostics<CR>")
-nmap({"n", "i"}, "<M-S-N>", "<Cmd>Lspsaga diagnostic_jump_prev<CR>")
-nmap({"n", "i"}, "<M-n>", "<Cmd>Lspsaga diagnostic_jump_next<CR>")
--- Lspsaga
-nmap("n", "ca", "<Cmd>Lspsaga code_action<CR>")
-nmap("i", "<M-S>", "<Esc><Cmd>Lspsaga code_action<CR>")
-nmap({"n", "i"}, "<M-f>", "<Cmd>Lspsaga lsp_finder<CR>")
-nmap({"n", "i"}, "<M-I>", "<Cmd>Lspsaga preview_definition<CR>")
 
-nmap({"n", "i"}, "<M-F>", function()
+map({"n", "i"}, "<M-F>", function()
 	vim.lsp.buf.format({
 		tabSize = vim.o.tabstop,
 		insertSpaces = vim.o.expandtab,
@@ -112,3 +100,5 @@ nmap({"n", "i"}, "<M-F>", function()
 		async = true,
 	})
 end)
+
+return setup

@@ -43,6 +43,7 @@ cmp.setup {
 			if #entries > 0 and (#entries == 1 or entries[1].exact) then
 				cmp.confirm({select = true})
 			elseif cmp.visible() then
+				if cmp.get_active_entry() == nil then cmp.select_next_item() end
 				cmp.select_next_item()
 			else
 				cmp.complete()
@@ -71,31 +72,26 @@ cmp.setup {
 	},
 	formatting = {
 		format = function(entry, item)
-			local name = entry.source.name
-			item.kind = name == "nvim_lua" and "  " or name == "calc" and "  " or name == "buffer" and
-					            "  " or name == "latex_symbols" and "  " or name == "emoji" and "" or
-					            kind_icons[item.kind]
+			item.kind =
+					({calc = "  ", buffer = "  ", latex_symbols = "  ", emoji = ""})[entry.source
+							.name] or kind_icons[item.kind]
 			item.menu = ""
 			return item
 		end,
 	},
 	completion = {keyword_length = 2},
-	window = {documentation = {border = {"╭", "─", "╮", "│", "╯", "─", "╰", "│"}}},
+	window = {documentation = {border = "rounded", winhighlight = ""}},
 	experimental = {ghost_text = true},
 	sources = cmp.config.sources {
 		{name = "nvim_lsp"},
 		{name = "luasnip"},
 		{name = "path"},
 		{name = "calc"},
-		{name = "emoji"},
-		-- {name = "latex_symbols"},
-		-- {name = "buffer"}
 	},
 }
 
 cmp.setup.filetype('lua', {
 	sources = cmp.config.sources {
-		{name = "nvim_lua"},
 		{name = "nvim_lsp"},
 		{name = "luasnip"},
 		{name = "calc"},
@@ -116,7 +112,3 @@ cmp.setup.filetype('markdown', {
 
 cmp.setup.cmdline(":", {sources = {{name = "cmdline"}, {name = "path"}, {name = "buffer"}}})
 cmp.setup.cmdline("/", {sources = {{name = "buffer"}}})
-
-_G.capabilities = require'cmp_nvim_lsp'.default_capabilities(vim.lsp.protocol
-		                                                             .make_client_capabilities())
-vim.cmd("hi link CompeDocumentation Pmenu")

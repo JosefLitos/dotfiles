@@ -1,22 +1,19 @@
-require'Comment'.setup {
-	ignore = '^$',
-	padding = true,
-	mappings = {basic = true, extra = false},
-}
-map("n", "<C-S-C>", "gcc")
-map("v", "<C-S-C>", "gc")
-map("i", "<C-S-C>", "<Esc>gcca")
-map("x", "<C-S-X>", "gc")
-map("n", "<C-S-X>", "gbc")
-map("i", "<C-S-X>", "<Esc>gbca")
-map("x", "<C-S-X>", "gb")
-map("n", "<M-x>", "gca}")
-map("i", "<M-x>", "<Esc>gca}a")
-map("x", "<M-x>", "gb")
-map("n", "<M-S-X>", "gbip")
-map("i", "<M-S-X>", "<Esc>gbipa")
-map("x", "<M-S-X>", "gb")
-map("x", "<M-c>", "gc")
-map("n", "<M-C>", "gcip")
-map("i", "<M-C>", "<Esc>gcipa")
-map("x", "<M-C>", "gc")
+require'Comment'.setup {ignore = '^$', padding = true, mappings = {basic = true, extra = false}}
+local map = vim.keymap.set
+map("n", "<C-S-C>", "gcc", {remap = true, silent = true})
+map("v", "<C-S-C>", "gc", {remap = true, silent = true})
+map("i", "<C-S-C>", "<Esc>gcca", {remap = true, silent = true})
+map("x", "<C-S-X>", "gc", {remap = true, silent = true})
+map("n", "<C-S-X>", "gbc", {remap = true, silent = true})
+map("i", "<C-S-X>", "<Esc>gbca", {remap = true, silent = true})
+map("x", "<C-S-X>", "gb", {remap = true, silent = true})
+map("n", "<M-x>", "gca}", {remap = true, silent = true})
+map("i", "<M-x>", "<Esc>gca}a", {remap = true, silent = true})
+map("x", "<M-x>", "gb", {remap = true, silent = true})
+map("n", "<M-S-X>", "gbip", {remap = true, silent = true})
+map("i", "<M-S-X>", "<Esc>gbipa", {remap = true, silent = true})
+map("x", "<M-S-X>", "gb", {remap = true, silent = true})
+map("x", "<M-c>", "gc", {remap = true, silent = true})
+map("n", "<M-C>", "gcip", {remap = true, silent = true})
+map("i", "<M-C>", "<Esc>gcipa", {remap = true, silent = true})
+map("x", "<M-C>", "gc", {remap = true, silent = true})

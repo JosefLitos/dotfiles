@@ -2,32 +2,32 @@ require'bufferline'.setup {
 	animation = false,
 	maximum_padding = 0,
 	minimum_padding = 0,
-	icon_close_tab = '',
+	icon_close_tab = ' ',
+	icon_close_tab_modified = ' ●',
+	icon_separator_active = '▊',
 }
 
+local map = vim.keymap.set
 -- Moving between
-nmap("n", "<M-S-,>", "<Cmd>BufferMovePrevious<CR>")
-nmap("n", "<M-S-.>", "<Cmd>BufferMoveNext<CR>")
-nmap("", "<M-,>", "<Cmd>BufferPrevious<CR>")
-nmap("i", "<M-,>", "<C-o><Cmd>BufferPrevious<CR>")
-nmap("t", "<M-,>", "<Esc><Cmd>BufferPrevious<CR>i")
-nmap("", "<M-.>", "<Cmd>BufferNext<CR>")
-nmap("i", "<M-.>", "<C-o><Cmd>BufferNext<CR>")
-nmap("t", "<M-.>", "<Esc><Cmd>BufferNext<CR>i")
-nmap("", "<S-Tab>", "<Cmd>BufferPrevious<CR>")
-nmap("", "<Tab>", "<Cmd>BufferNext<CR>")
+map("n", "<M-S-,>", "<Cmd>BufferMovePrevious<CR>")
+map("n", "<M-S-.>", "<Cmd>BufferMoveNext<CR>")
+map({"", "i"}, "<M-,>", "<Cmd>BufferPrevious<CR>")
+map("t", "<M-,>", "<Esc><Cmd>BufferPrevious<CR>i")
+map({"", "i"}, "<M-.>", "<Cmd>BufferNext<CR>")
+map("t", "<M-.>", "<Esc><Cmd>BufferNext<CR>i")
+map("", "<S-Tab>", "<Cmd>BufferPrevious<CR>")
+map("", "<Tab>", "<Cmd>BufferNext<CR>")
 -- Direct selection
-nmap({"", "i"}, "<M-1>", "<Cmd>BufferGoto 1<CR>")
-nmap({"", "i"}, "<M-2>", "<Cmd>BufferGoto 2<CR>")
-nmap({"", "i"}, "<M-3>", "<Cmd>BufferGoto 3<CR>")
-nmap({"", "i"}, "<M-4>", "<Cmd>BufferGoto 4<CR>")
-nmap({"", "i"}, "<M-5>", "<Cmd>BufferGoto 5<CR>")
-nmap({"", "i"}, "<M-6>", "<Cmd>BufferGoto 6<CR>")
-nmap({"", "i"}, "<M-7>", "<Cmd>BufferGoto 7<CR>")
-nmap({"", "i"}, "<M-8>", "<Cmd>BufferGoto 8<CR>")
-nmap({"", "i"}, "<M-9>", "<Cmd>BufferGoto 9<CR>")
+map({"", "i"}, "<M-1>", "<Cmd>BufferGoto 1<CR>")
+map({"", "i"}, "<M-2>", "<Cmd>BufferGoto 2<CR>")
+map({"", "i"}, "<M-3>", "<Cmd>BufferGoto 3<CR>")
+map({"", "i"}, "<M-4>", "<Cmd>BufferGoto 4<CR>")
+map({"", "i"}, "<M-5>", "<Cmd>BufferGoto 5<CR>")
+map({"", "i"}, "<M-6>", "<Cmd>BufferGoto 6<CR>")
+map({"", "i"}, "<M-7>", "<Cmd>BufferGoto 7<CR>")
+map({"", "i"}, "<M-8>", "<Cmd>BufferGoto 8<CR>")
+map({"", "i"}, "<M-9>", "<Cmd>BufferGoto 9<CR>")
 -- Closing
-nmap("", "<C-w>", "<Cmd>BufferClose<CR>")
-nmap("i", "<C-w>", "<C-o><Cmd>BufferClose<CR>")
-nmap({"", "i"}, "<C-S-W>", "<Cmd>BufferClose!<CR>")
-nmap("t", "<C-d>", "<C-d><Esc><Cmd>BufferClose!<CR>a")
+map({"", "i"}, "<C-w>", "<Cmd>BufferClose<CR>")
+map({"", "i"}, "<C-S-W>", "<Cmd>BufferClose!<CR>")
+map("t", "<C-S-D>", "<C-d><Esc><Cmd>BufferClose!<CR>a")

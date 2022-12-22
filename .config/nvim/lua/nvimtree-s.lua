@@ -1,12 +1,13 @@
-local tree_cb = require'nvim-tree.config'.nvim_tree_callback
+local exec = require'nvim-tree.actions.dispatch'.dispatch
 require'nvim-tree'.setup {
-	hijack_directories = {enable = false}, -- disable as directory opener
+	hijack_directories = {enable = false},
 	disable_netrw = true,
-	hijack_netrw = true,
 	respect_buf_cwd = true,
-	ignore_ft_on_setup = {"startify"},
-	update_focused_file = {enable = true, update_cwd = true},
-	filters = {dotfiles = true, custom = {".git", "node_modules", ".cache"}},
+	reload_on_bufenter = true,
+	ignore_ft_on_setup = {"alpha"},
+	update_focused_file = {enable = true, update_root = true},
+	sync_root_with_cwd = true,
+	filters = {dotfiles = false, custom = {".git", "node_modules", ".cache"}},
 	renderer = {
 		indent_markers = {enable = true},
 		icons = {
@@ -16,42 +17,39 @@ require'nvim-tree'.setup {
 				folder = {default = "", open = "", empty = "", empty_open = "", symlink = ""},
 				git = {unstaged = "", staged = "✓", unmerged = "", renamed = "➜", untracked = ""},
 			},
+			show = {git = false},
 		},
 	},
 	actions = {open_file = {quit_on_open = true, window_picker = {enable = false}}},
-	view = {
-		mappings = {
-			custom_only = true,
-			list = {
-				{key = "h", cb = tree_cb("dir_up")},
-				{key = "<Left>", cb = tree_cb("dir_up")},
-				{key = "l", cb = tree_cb("edit")},
-				{key = "<Right>", cb = tree_cb("edit")},
-				{key = "E", cb = tree_cb("edit")},
-				{key = "<C-t>", cb = tree_cb("tabnew")},
-				{key = "<", cb = tree_cb("prev_sibling")},
-				{key = ">", cb = tree_cb("next_sibling")},
-				{key = "-", cb = tree_cb("close_node")},
-				{key = "<Tab>", cb = vim.api.nvim_replace_termcodes("<C-w><C-l>", true, true, true)},
-				{key = "<M-e>", cb = vim.api.nvim_replace_termcodes("<C-w><C-l>", true, true, true)},
-				{key = "<M-Tab>", cb = vim.api.nvim_replace_termcodes("<C-w><C-l>", true, true, true)},
-				{key = "<C-h>", cb = tree_cb("toggle_dotfiles")},
-				{key = "<BS>", cb = tree_cb("toggle_dotfiles")},
-				{key = "<F5>", cb = tree_cb("refresh")},
-				{key = "n", cb = tree_cb("create")},
-				{key = "<Del>", cb = tree_cb("remove")},
-				{key = "D", cb = tree_cb("remove")},
-				{key = "X", cb = tree_cb("cut")},
-				{key = "C", cb = tree_cb("copy")},
-				{key = "V", cb = tree_cb("paste")},
-				{key = "R", cb = tree_cb("rename")},
-				{key = "q", cb = tree_cb("close")},
-				{key = "<Leader>d", cb = tree_cb("cd")},
-			},
-		},
-	},
+	on_attach = function(bufnr)
+		local function map(key, fn) vim.keymap.set("n", key, function() exec(fn) end, {buffer = bufnr}) end
+		map("h", "dir_up")
+		map("<Left>", "dir_up")
+		map("l", "edit")
+		map("<Right>", "edit")
+		map("<CR>", "edit")
+		map("<", "prev_sibling")
+		map(">", "next_sibling")
+		map("-", "close_node")
+		map("<C-h>", "toggle_dotfiles")
+		map("<BS>", "toggle_dotfiles")
+		map("<F5>", "refresh")
+		map("n", "create")
+		map("<Del>", "remove")
+		map("D", "remove")
+		map("X", "cut")
+		map("C", "copy")
+		map("V", "paste")
+		map("R", "rename")
+		map("q", "close")
+		map("<Leader>d", "cd")
+		map("O", "cd")
+		map("<S-CR>", "cd")
+		vim.keymap.set("n", "<M-Tab>", vim.api.nvim_replace_termcodes("<C-w><C-l>", true, true, true),
+				{buffer = bufnr})
+	end,
+	remove_keymaps = true,
 }
 
-nmap("n", "E", "<Cmd>NvimTreeToggle<CR>")
-nmap("n", "<M-e>", "<Cmd>NvimTreeFocus<CR>")
-nmap("n", "<M-Tab>", "<Cmd>NvimTreeFocus<CR>")
+vim.keymap.set("n", "E", "<Cmd>NvimTreeToggle<CR>")
+vim.keymap.set("n", "<M-Tab>", "<Cmd>NvimTreeFocus<CR>")
