@@ -140,3 +140,63 @@ vim.ui.select = function(items, opts, on_choice)
 	vim.keymap.set("n", "<CR>", function() callback(vim.api.nvim_win_get_cursor(win)[1]) end,
 			{buffer = buf})
 end
+
+vim.lsp.util.convert_input_to_markdown_lines = function(input, contents)
+	contents = contents or {}
+	local str = input.value or input
+	if input.kind or type(input) == "string" then
+		str = str:gsub("%s+(```\n)", "%1"):gsub("([ \n\t])`([^`\n]+%s[^`\n]+)`%s*",
+				"%1\n```" .. vim.bo.filetype .. "\n%2```\n")
+		if vim.bo.filetype ~= "java" then str = str:gsub("{(%a+)}", "*`%1`*") end
+		if vim.bo.filetype == "lua" then
+			str = str:gsub("|([^| \t\n]+)|", "[%1]"):gsub("\n    %s+", "\n  "):gsub("@%*(.-)%*", "***@%1***")
+					:gsub("<pre>(.-)</pre>", "```" .. vim.bo.filetype .. "%1```"):gsub("\n  %- ([%a_]+):",
+							"\n   - `%1`:")
+		end
+	elseif input.language then
+		str = string.format("```%s\n%s```", input.language, str)
+	else
+		for _, v in ipairs(input) do contents = vim.lsp.util.convert_input_to_markdown_lines(v, contents) end
+		return contents
+	end
+	local i = #contents + 1
+	if vim.bo.filetype == "java" then
+		local code = false
+		for _, v in ipairs(vim.split(str, "\n")) do
+			if #v > 4 then
+				local _, idx = v:find("^>?    ")
+				if idx and (code or not v:find(" +*", idx + 1)) then
+					v = v:sub(idx + 1)
+					if not code then
+						contents[i] = "```java"
+						i = i + 1;
+						code = true
+					end
+				elseif code then
+					code = false
+					contents[i - 1] = contents[i - 1] .. "```"
+				end
+				contents[i] = v;
+				i = i + 1;
+			end
+		end
+	else
+		for _, v in ipairs(vim.split(str, "\n")) do
+			if #v > 2 then
+				if v == "---" and contents[i - 1]:find("```", 1, true) == nil then
+					contents[i] = ""
+					i = i + 1
+				end
+				contents[i] = v;
+				i = i + 1;
+			end
+		end
+	end
+	return contents
+end
+
+vim.lsp.util.stylize_markdown = function(buf, contents, _opts)
+	vim.api.nvim_buf_set_option(buf, "filetype", "markdown")
+	vim.api.nvim_buf_set_lines(buf, 0, 0, false, contents)
+	return contents
+end

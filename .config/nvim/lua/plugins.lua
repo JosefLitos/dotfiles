@@ -18,7 +18,6 @@ use {
 		vim.o.background = (time > 7 - month and time < 16 + month) and "light" or "dark"
 		vim.g.bg_none = vim.o.background == "dark"
 		vim.cmd.colorscheme "nerdcontrast"
-		require "ui"
 	end,
 }
 use {"kyazdani42/nvim-web-devicons", after = "nerdcontrast.nvim"}

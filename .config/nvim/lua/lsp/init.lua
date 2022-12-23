@@ -99,4 +99,6 @@ map({"n", "i"}, "<M-F>", function()
 	})
 end)
 
+require "ui"
+
 return setup
