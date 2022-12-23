@@ -5,11 +5,7 @@ packer.reset()
 
 vim.keymap.set("n", "<Leader>u", "<NOP>")
 -- Packer can manage itself as an optional plugin
-use {
-	"wbthomason/packer.nvim",
-	config = [[require'plugins'.sync()]],
-	keys = {{"n", "<Leader>u"}},
-}
+use {"wbthomason/packer.nvim", config = [[require'plugins'.sync()]], keys = {{"n", "<Leader>u"}}}
 
 -- Nvim ui
 use {
@@ -59,21 +55,27 @@ use {
 }
 use {"folke/neodev.nvim", config = [[require 'lsp'(require 'lsp.lua-ls'())]], ft = "lua"}
 use {"mfussenegger/nvim-jdtls", config = [[require "lsp.jdtls"]], ft = "java"}
--- use {"SmiteshP/nvim-navic", event = "User Initialized", config=[[navic()]]}
+use {"neovim/nvim-lspconfig", config = [[require "lsp"]], after = "cmp-nvim-lsp"}
 use {
 	"ray-x/lsp_signature.nvim",
 	config = [[require'lsp_signature'.setup {floating_window = false, hint_prefix = " "}]],
 	after = "nvim-lspconfig",
 }
+use {
+	"danymat/neogen",
+	config = [[
+		local ng = require "neogen"
+		ng.setup {snippet_engine = "luasnip"}
+		vim.keymap.set({"n", "i"}, "<M-y>", ng.generate)
+	]],
+	after = "nvim-treesitter",
+}
 -- Formatting
 use {
 	"jose-elias-alvarez/null-ls.nvim",
 	config = [[require "lsp.null-ls"]],
-	after = "plenary.nvim",
-	requires = {
-		{"neovim/nvim-lspconfig", config = [[require "lsp"]], after = "cmp-nvim-lsp"},
-		{"nvim-lua/plenary.nvim", event = "User Initialized"},
-	},
+	after = "nvim-lspconfig",
+	requires = {"nvim-lua/plenary.nvim", event = "User Initialized"},
 }
 -- Debugging
 use {
@@ -113,35 +115,5 @@ use "LunarVim/bigfile.nvim"
 			vim.g.mcEnableBuiltinJSON = false
 		end,
 	} ]]
-
-use {
-	"folke/noice.nvim",
-	disable = true,
-	config = function()
-		require'noice'.setup {
-			lsp = {
-				-- override markdown rendering so that **cmp** and other plugins use **Treesitter**
-				override = {
-					["vim.lsp.util.convert_input_to_markdown_lines"] = true,
-					["vim.lsp.util.stylize_markdown"] = true,
-					["cmp.entry.get_documentation"] = true,
-				},
-			},
-			-- you can enable a preset for easier configuration
-			presets = {
-				bottom_search = true, -- use a classic bottom cmdline for search
-				command_palette = true, -- position the cmdline and popupmenu together
-				long_message_to_split = true, -- long messages will be sent to a split
-				inc_rename = false, -- enables an input dialog for inc-rename.nvim
-				lsp_doc_border = false, -- add a border to hover docs and signature help
-			},
-		}
-	end,
-	after = "nvim-notify",
-	requires = {
-		{"MunifTanjim/nui.nvim", event = "User Initialized"},
-		{"rcarriga/nvim-notify", after = "nui.nvim"},
-	},
-}
 
 return packer

@@ -39,9 +39,7 @@ local config = {
 		java = {
 			signatureHelp = {enabled = true},
 			codeGeneration = {
-				toString = {
-					template = "${object.className}{${member.name()}=${member.value}, ${otherMembers}}",
-				},
+				toString = {template = "${object.className}{${member.name()}=${member.value}, ${otherMembers}}"},
 				useBlocks = true,
 				generateComments = true,
 			},
@@ -63,12 +61,13 @@ local config = {
 		bundles = vim.split(vim.fn.glob("~/.local/share/vscode-java-test/server/*.jar"), "\n"),
 		extendedClientCapabilities = eCC,
 	},
-	on_attach = function() jdtls.setup_dap({hotcodereplace = "auto"}) end,
+	on_attach = function()
+		jdtls.setup_dap({hotcodereplace = "auto"})
+		vim.api.nvim_set_current_dir(client.config.root_dir)
+	end,
 }
 table.insert(config.init_options.bundles, vim.fn.glob(
 		"~/.local/share/java-debug/com.microsoft.java.debug.plugin/target/com.microsoft.java.debug.plugin-*.jar"))
-local ok, navic = pcall(require, "nvim-navic")
-if ok then config.on_attach = navic.attach end
 vim.api.nvim_create_autocmd("FileType", {
 	pattern = "java",
 	callback = function(state)

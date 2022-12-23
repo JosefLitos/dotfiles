@@ -29,10 +29,18 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 	end,
 })
 
--- vim.api.nvim_create_autocmd({"BufFilePost"}, {
--- 	pattern = "*conf*",
--- 	callback = function(data) vim.api.nvim_buf_set_option(data.buf, "filetype", "config") end,
--- })
+vim.api.nvim_create_autocmd("BufEnter", {
+	pattern = "*.*",
+	callback = function(state)
+		local clients = vim.lsp.get_active_clients({bufnr = state.buf})
+		for _, client in ipairs(clients) do
+			if client.name ~= "null-ls" then
+				vim.api.nvim_set_current_dir(client.config.root_dir)
+				return
+			end
+		end
+	end,
+})
 
 vim.cmd [[
 augroup _general_settings

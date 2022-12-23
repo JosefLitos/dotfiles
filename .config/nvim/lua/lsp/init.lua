@@ -6,8 +6,7 @@ vim.diagnostic.config {
 	severity_sort = true,
 	float = {focusable = false, border = "rounded", source = "always"},
 }
-vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover,
-		{border = "rounded"})
+vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {border = "rounded"})
 
 local capabilities = require'cmp_nvim_lsp'.default_capabilities()
 local function setup(server, opts)
@@ -29,8 +28,7 @@ local function setup(server, opts)
 				                                                        opts.settings.documentFormatting)
 		vim.bo.formatoptions = "tcqjl1"
 		vim.wo.signcolumn = "number"
-		local ok, navic = pcall(require, "nvim-navic")
-		if ok then navic.attach(client, bufnr) end
+		vim.api.nvim_set_current_dir(client.config.root_dir)
 	end
 	require'lspconfig'[server].setup(opts)
 end

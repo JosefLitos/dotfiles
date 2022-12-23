@@ -28,7 +28,7 @@ vim.o.timeoutlen = 500 -- By default timeoutlen is 1000 ms
 vim.o.scrollback = 300
 vim.o.synmaxcol = 127
 vim.o.history = 5000
-vim.o.shada = "'100,<50,s10,/100,:100,h,rterm:,rjdt:,r/usr/share/nvim/runtime/doc/"
+vim.o.shada = "'100,<50,s10,/100,:100,h,rterm:,rjdt:,r/usr/share/nvim/runtime/"
 vim.g.rust_recommended_style = 0
 
 vim.fn.matchadd("Todo", "TODO")

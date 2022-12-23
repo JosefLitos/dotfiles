@@ -57,12 +57,7 @@ wtwitch() {
 }
 
 streamerList=(iskall85 tangotek mrgregles goodtimeswithscar skizzleman renthedogtv)
-
-if ((SHLVL < 3)); then
-	streamer=$(printf '%s\n' ${streamerList[@]} | dmenu -p Streamer)
-else
-	streamer=$(printf '%s\n' ${streamerList[@]} | fzf --prompt="Streamer: ")
-fi
+streamer=$(printf '%s\n' ${streamerList[@]} | dmenu -p Streamer)
 echo "$streamer"
 if [[ -z $streamer ]]; then
 	exit 0
@@ -85,12 +80,7 @@ if [[ -z $url ]]; then
 	streams=$(wtwitch $streamer)
 	urls=($(echo "$streams" | sed 's/^.*https:/https:/'))
 	streams=$(echo "$streams" | sed 's/https:.*//')
-
-	if ((SHLVL < 3)); then
-		video=$(echo "$streams" | dmenu -p Video -i)
-	else
-		video=$(echo "$streams" | fzf --prompt="Video: ")
-	fi
+	video=$(echo "$streams" | dmenu -p Video -i)
 
 	if [[ -z $video ]]; then
 		url="https://twitch.tv/$streamer"
@@ -103,11 +93,7 @@ fi
 
 if [[ -z $quality ]]; then
 	quals=(best medium low worst audio)
-	if ((SHLVL < 3)); then
-		quality=$(printf '%s\n' ${quals[@]} | dmenu -p Quality)
-	else
-		quality=$(printf '%s\n' ${quals[@]} | fzf --prompt="Quality: ")
-	fi
+	quality=$(printf '%s\n' ${quals[@]} | dmenu -p Quality)
 
 	if [[ -z $quality ]]; then
 		exit 0

@@ -79,14 +79,4 @@ local config = {
 	},
 }
 
---[[ function _G.navic()
-	config.components.active[1][3] = {
-		provider = require'nvim-navic'.get_location,
-		enabled = require'nvim-navic'.is_available,
-		hl = {fg = colors["Cyan"][1]}
-	}
-	require'feline'.setup(config)
-	_G.navic = nil
-end ]]
-
 require'feline'.setup(config)

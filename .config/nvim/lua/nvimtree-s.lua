@@ -3,11 +3,10 @@ require'nvim-tree'.setup {
 	hijack_directories = {enable = false},
 	disable_netrw = true,
 	respect_buf_cwd = true,
-	reload_on_bufenter = true,
 	ignore_ft_on_setup = {"alpha"},
 	update_focused_file = {enable = true, update_root = true},
 	sync_root_with_cwd = true,
-	filters = {dotfiles = false, custom = {".git", "node_modules", ".cache"}},
+	filters = {dotfiles = true, custom = {".git", "node_modules", ".cache"}},
 	renderer = {
 		indent_markers = {enable = true},
 		icons = {
@@ -31,6 +30,8 @@ require'nvim-tree'.setup {
 		map("<", "prev_sibling")
 		map(">", "next_sibling")
 		map("-", "close_node")
+		map("e", "expand_all")
+		map("<M-e>", "collapse_all")
 		map("<C-h>", "toggle_dotfiles")
 		map("<BS>", "toggle_dotfiles")
 		map("<F5>", "refresh")
@@ -42,7 +43,7 @@ require'nvim-tree'.setup {
 		map("V", "paste")
 		map("R", "rename")
 		map("q", "close")
-		map("<Leader>d", "cd")
+		map("cd", "cd")
 		map("O", "cd")
 		map("<S-CR>", "cd")
 		vim.keymap.set("n", "<M-Tab>", vim.api.nvim_replace_termcodes("<C-w><C-l>", true, true, true),
