@@ -105,13 +105,13 @@ alpha.setup({
 		{
 			type = "group",
 			val = function()
-				vim.keymap.set("n", "q", alpha.start, {buffer = true})
-				vim.keymap.set("n", "<Esc>", "q", {remap = true, buffer = true})
-				vim.keymap.set("n", "<Right>", "<CR>", {remap = true, buffer = true})
+				map("n", "q", alpha.start, {buffer = true})
+				map("n", "<Esc>", "q", {remap = true, buffer = true})
+				map("n", "<Right>", "<CR>", {remap = true, buffer = true})
 				return {}
 			end,
 		},
 	},
 })
 
-vim.keymap.set({"", "i"}, "<C-n>", alpha.start)
+map({"", "i"}, "<C-n>", alpha.start)

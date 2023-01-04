@@ -1,4 +1,4 @@
-local map = vim.keymap.set
+_G.map = vim.keymap.set
 vim.g.mapleader = " "
 
 -- Better indenting
@@ -74,16 +74,6 @@ map({"", "i"}, "<C-h>", "<C-Left>")
 map({"", "i"}, "<C-j>", "<PageDown>")
 map({"", "i"}, "<C-k>", "<PageUp>")
 map({"", "i"}, "<C-l>", "<C-Right>")
-map({"", "i"}, "<M-S-H>", "<Home>")
-map("", "<M-S-J>", "L")
-map("i", "<M-S-J>", "<C-o>L")
-map("", "<M-S-K>", "H")
-map("i", "<M-S-K>", "<C-o>H")
-map({"", "i"}, "<M-S-L>", "<End>")
-map("i", "<M-h>", "<Left>")
-map("i", "<M-j>", "<Down>")
-map("i", "<M-k>", "<Up>")
-map("i", "<M-l>", "<Right>")
 map("i", "<M-m>", "<C-o>m")
 map("i", "<C-g>", "<C-o>`")
 -- With arrows
@@ -137,13 +127,7 @@ map("n", "<C-S-L>", "<C-w>l")
 map("i", "<C-S-L>", "<C-o><C-w>l")
 map("t", "<C-S-L>", "<C-\\><C-o><C-w>l")
 
--- Resize windows
-map("n", "<M-j>", "<Cmd>resize -2<CR>")
-map("n", "<M-k>", "<Cmd>resize +2<CR>")
-map("n", "<M-h>", "<Cmd>vertical resize -2<CR>")
-map("n", "<M-l>", "<Cmd>vertical resize +2<CR>")
-
-map("n", "S", "<Cmd>cd %:h<CR><Cmd>term<CR><Cmd>setlocal nonu scrollback=100<CR>i")
+map("n", "S", "<Cmd>term<CR><Cmd>setlocal nonu scrollback=100<CR>i")
 map("n", "cd", "<Cmd>cd %:h<CR>")
 
 -- Refresh and reload

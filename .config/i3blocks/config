@@ -47,7 +47,7 @@ signal=11
 interval=60
 
 [kb]
-command=[[ $(swaymsg -t get_inputs -p | grep US -m 1) ]] && echo  US || echo  CZ
+command=[[ $(swaymsg -t get_inputs -p | grep \(US\) -m 1) ]] && echo  US || echo  CZ
 color=#bd40b7
 signal=12
 

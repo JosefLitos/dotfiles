@@ -1,65 +1,71 @@
 local nls = require "null-ls"
 
 -- local h = require("null-ls.helpers")
-nls.setup({
-	-- single_file_support = true,
-	-- init_options = {documentFormatting = true, codeAction = true},
+nls.setup {
+	single_file_support = true,
 	sources = {
 		-- nls.builtins.formatting.latexindent.with {
 		-- 	extra_args = {"-l", "~/.config/latexindent.yaml", "-g", "/dev/null"},
 		-- },
 		nls.builtins.formatting.lua_format.with {
-			extra_args = {
-				"--column-limit=" .. vim.o.textwidth,
-				(vim.o.expandtab or "--use-tab"),
-				"--tab-width=" .. vim.o.tabstop,
-				"--indent-width=" .. (vim.o.expandtab and vim.o.shiftwidth or 1),
-				"--continuation-indent-width=2",
-				"--chop-down-table",
-				"--no-align-table-field",
-				"--no-align-parameter",
-				"--no-align-args",
-				"--extra-sep-at-table-end",
-			},
+			extra_args = function()
+				return {
+					"--column-limit=" .. vim.bo.textwidth,
+					(vim.bo.expandtab and "--no" or "-") .. "-use-tab",
+					"--tab-width=" .. vim.bo.tabstop,
+					"--indent-width=" .. (vim.bo.expandtab and vim.o.shiftwidth or 1),
+					"--continuation-indent-width=2",
+					"--chop-down-table",
+					"--no-align-table-field",
+					"--no-align-parameter",
+					"--no-align-args",
+					"--extra-sep-at-table-end",
+				}
+			end,
 		},
 		nls.builtins.formatting.prettier.with {
-			extra_args = {
-				"--print-width=" .. vim.o.textwidth,
-				(vim.o.expandtab or "--use-tabs"),
-				"--tab-width=" .. vim.o.tabstop,
-				"--no-semi",
-				"--prose-wrap=always",
-			},
+			extra_args = function()
+				return {
+					"--print-width=" .. vim.bo.textwidth,
+					(vim.bo.expandtab or "--use-tabs"),
+					"--tab-width=" .. vim.bo.tabstop,
+					"--no-semi",
+					"--prose-wrap=always",
+				}
+			end,
 		},
 		nls.builtins.formatting.shfmt.with {
-			extra_args = {"-ci", "-s", "-sr", "-i", (vim.o.expandtab and vim.o.tabstop or 0)},
+			extra_args = function()
+				return {"-ci", "-s", "-sr", "-i", (vim.bo.expandtab and vim.bo.tabstop or 0)}
+			end,
 		},
 		nls.builtins.formatting.clang_format.with {
-			-- filetypes = {"c", "cpp", "h", "java"},
-			extra_args = {
-				"--style",
-				({
-					vim.inspect({
-						ColumnLimit = vim.o.textwidth,
-						TabWidth = vim.o.tabstop,
-						UseTab = vim.o.expandtab and "Never" or "ForIndentation",
-						AllowAllParametersOfDeclarationOnNextLine = true,
-						AllowShortIfStatementsOnASingleLine = "AllIfsAndElse",
-						AllowShortLambdasOnASingleLine = "All",
-						AllowShortLoopsOnASingleLine = true,
-						AllowShortBlocksOnASingleLine = "Empty",
-						AllowShortFunctionsOnASingleLine = "None",
-						BreakBeforeBraces = "Attach",
-						AlignOperands = "DontAlign",
-						IndentCaseBlocks = false,
-						IndentCaseLabels = false,
-					}):gsub(" =", ":"),
-				})[1],
-			},
+			extra_args = function(client)
+				if vim.loop.fs_stat(client.cwd .. "/.clang_format") then return {"--style", "file"} end
+				return {
+					"--style",
+					string.format([[{
+AllowAllParametersOfDeclarationOnNextLine: true,
+AllowShortIfStatementsOnASingleLine: "AllIfsAndElse",
+AllowShortLambdasOnASingleLine: "All",
+AllowShortLoopsOnASingleLine: true,
+AllowShortBlocksOnASingleLine: "Empty",
+AllowShortFunctionsOnASingleLine: "None",
+BreakBeforeBraces: "Attach",
+AlignOperands: "DontAlign",
+IndentCaseBlocks: false,
+IndentCaseLabels: false,
+SortJavaStaticImport: "After",
+SpaceAfterCStyleCast: true,
+JavaImportGroups: [ "java" ]
+IndentWidth: %d, TabWidth: %d, UseTab: %s, ColumnLimit: %d}]], vim.bo.shiftwidth, vim.bo.tabstop,
+							vim.bo.expandtab and "Never" or "ForIndentation", vim.bo.textwidth),
+				}
+			end,
 		},
 		-- nls.builtins.code_actions.shellcheck,
 		-- nls.builtins.diagnostics.eslint,
 		nls.builtins.code_actions.eslint,
 		nls.builtins.formatting.yapf,
 	},
-})
+}

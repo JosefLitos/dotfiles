@@ -83,9 +83,9 @@ vim.ui.input = function(opts, on_confirm)
 			on_confirm(opts.cancelreturn == nil and "" or opts.cancelreturn)
 		end
 	end
-	vim.keymap.set("i", "<C-q>", callback, {buffer = buf})
-	vim.keymap.set("i", "<Esc>", callback, {buffer = buf})
-	vim.keymap.set("i", "<CR>", function() callback(true) end, {buffer = buf})
+	map("i", "<C-q>", callback, {buffer = buf})
+	map("i", "<Esc>", callback, {buffer = buf})
+	map("i", "<CR>", function() callback(true) end, {buffer = buf})
 end
 
 vim.ui.select = function(items, opts, on_choice)
@@ -98,7 +98,7 @@ vim.ui.select = function(items, opts, on_choice)
 	for i, item in ipairs(items) do
 		lines[i] = "[" .. i .. "] " .. opts.format_item(item)
 		if #lines[i] > width then width = #lines[i] end
-		vim.keymap.set("n", tostring(i), function() callback(i) end, {buffer = buf})
+		map("n", tostring(i), function() callback(i) end, {buffer = buf})
 	end
 	vim.api.nvim_buf_set_lines(buf, 0, -1, true, lines)
 	vim.bo[buf].modifiable = false
@@ -135,9 +135,9 @@ vim.ui.select = function(items, opts, on_choice)
 		vim.api.nvim_win_close(win, true)
 		on_choice(i and items[i], i)
 	end
-	vim.keymap.set("n", "q", callback, {buffer = buf})
-	vim.keymap.set("n", "<Esc>", callback, {buffer = buf})
-	vim.keymap.set("n", "<CR>", function() callback(vim.api.nvim_win_get_cursor(win)[1]) end,
+	map("n", "q", callback, {buffer = buf})
+	map("n", "<Esc>", callback, {buffer = buf})
+	map("n", "<CR>", function() callback(vim.api.nvim_win_get_cursor(win)[1]) end,
 			{buffer = buf})
 end
 

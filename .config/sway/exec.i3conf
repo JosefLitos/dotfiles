@@ -24,13 +24,13 @@ bindswitch --reload --locked lid:on exec '[[ $(cat /sys/class/power_supply/BAT0/
 bindswitch --reload --locked lid:off exec sleep 1 && swaymsg 'output $display dpms on'
 
 # Devices
-input "type:keyboard" {
+input type:keyboard {
 	xkb_layout us,cz
 	xkb_options caps:escape,compose:102
 	repeat_delay 225
 	repeat_rate 40
 }
-input "type:touchpad" {
+input type:touchpad {
 	tap enabled
 	middle_emulation enabled
 }

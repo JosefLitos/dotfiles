@@ -82,8 +82,7 @@ vim.api.nvim_create_autocmd("FileType", {
 			vim.api.nvim_buf_set_option(state.buf, "formatoptions", "tcqjl1")
 			jdtls.start_or_attach(config)
 			require'jdtls.setup'.add_commands()
-			local map, opts = vim.keymap.set, {buffer = true}
-			map("n", "<M-I>", jdtls.organize_imports, opts)
+			local opts = {buffer = true}
 			map("n", "gtc", jdtls.test_class, opts)
 			map("n", "gtf", jdtls.test_nearest_method, opts)
 			map("n", "gjd", require'jdtls.dap'.setup_dap_main_class_configs, opts)
@@ -95,7 +94,7 @@ vim.api.nvim_create_autocmd("FileType", {
         command! -buffer JdtJol lua require'jdtls'.jol()
         command! -buffer JdtBytecode lua require'jdtls'.javap()
         ]], false)
-			map({"n", "i"}, "<M-r>", "<Cmd>JdtCompile", opts)
+			map({"n", "i"}, "<M-r>", function() jdtls.compile("full") end, opts)
 		end
 		if vim.g.initialized then
 			if vim.api.nvim_buf_get_option(state.buf, "bufhidden") ~= "" then

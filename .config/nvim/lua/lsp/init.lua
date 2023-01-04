@@ -9,16 +9,18 @@ vim.diagnostic.config {
 vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {border = "rounded"})
 
 local capabilities = require'cmp_nvim_lsp'.default_capabilities()
+local lsc = require "lspconfig"
 local function setup(server, opts)
-	if not opts then opts = {} end
-	local on_attach = opts.on_attach
+	if not opts then opts = require("lsp." .. server) end
 	if not opts.capabilities then
 		opts.capabilities = capabilities
 	else
 		opts.capabilities = vim.tbl_deep_extend("force", opts.capabilities, capabilities)
 	end
+	local on_attach = opts.on_attach
 	opts.on_attach = function(client, bufnr)
-		if vim.api.nvim_buf_get_option(bufnr, "bufhidden") ~= "" then
+		if vim.api.nvim_buf_get_option(bufnr, "bufhidden") ~= "" or
+				(on_attach and on_attach(client, bufnr) == false) then
 			vim.schedule(function() vim.lsp.buf_detach_client(bufnr, client.id) end)
 			return
 		end
@@ -28,9 +30,9 @@ local function setup(server, opts)
 				                                                        opts.settings.documentFormatting)
 		vim.bo.formatoptions = "tcqjl1"
 		vim.wo.signcolumn = "number"
-		vim.api.nvim_set_current_dir(client.config.root_dir)
+		if client.config.root_dir ~= nil then vim.api.nvim_set_current_dir(client.config.root_dir) end
 	end
-	require'lspconfig'[server].setup(opts)
+	lsc[server].setup(opts)
 end
 
 vim.fn.sign_define("DiagnosticSignError",
@@ -42,21 +44,18 @@ vim.fn.sign_define("DiagnosticSignHint",
 vim.fn.sign_define("DiagnosticSignInfo",
 		{texthl = "DiagnosticInfo", text = "", numhl = "DiagnosticInfo"})
 
-setup "bashls"
+setup("bashls", {})
 setup("clangd", {capabilities = {offsetEncoding = 'utf-16'}})
--- require "lsp.js-ts-ls"
-setup "pyright"
+-- require "lsp.js-ts"
+setup("pyright", {})
 setup("rust_analyzer", {settings = {documentFormatting = true}})
-setup(require 'lsp.tex-ls'())
--- lsp_setup "texlab"
--- require "lsp.tailwindcss-ls"
+setup "texlab"
 -- setup("cssls", {cmd = {"vscode-css-language-server", "--stdio"}})
 -- setup("html",
 -- {cmd = {"vscode-html-language-server", "--stdio"}, settings = {documentFormatting = true}})
--- setup(require "lsp.json-ls"())
--- setup "yamlls"
+-- setup "jsonls"
+-- setup("yamlls", {})
 
-local map = vim.keymap.set
 -- Lsp diagnostic
 map({"n", "i"}, "<M-d>", vim.diagnostic.open_float)
 map({"n", "i"}, "<M-N>", vim.diagnostic.goto_prev)
@@ -67,6 +66,8 @@ map("n", "gd", vim.lsp.buf.definition)
 map("n", "gr", vim.lsp.buf.references)
 map("n", "gi", vim.lsp.buf.implementation)
 map({"n", "i"}, "<M-i>", vim.lsp.buf.hover)
+map({"n", "i"}, "<M-h>", vim.lsp.buf.document_highlight)
+map({"n", "i"}, "<M-H>", vim.lsp.buf.clear_references)
 map("n", "ca", vim.lsp.buf.code_action)
 map("i", "<M-c>", vim.lsp.buf.code_action)
 map({"n", "i"}, "<C-r>", vim.lsp.buf.rename)
@@ -91,8 +92,8 @@ end)
 
 map({"n", "i"}, "<M-F>", function()
 	vim.lsp.buf.format({
-		tabSize = vim.o.tabstop,
-		insertSpaces = vim.o.expandtab,
+		tabSize = vim.bo.tabstop,
+		insertSpaces = vim.bo.expandtab,
 		trimTrailingWhitespace = true,
 		insertFinalNewline = false,
 		async = true,

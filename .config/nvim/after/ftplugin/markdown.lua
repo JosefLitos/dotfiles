@@ -1,4 +1,3 @@
-local map = vim.keymap.set
 vim.bo.expandtab = true
 local function enter_or_list()
 	local line = vim.api.nvim_buf_get_lines(0, vim.fn.line(".") - 1, -1, false)[1]:match(

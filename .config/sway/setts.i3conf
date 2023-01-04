@@ -35,53 +35,49 @@ set $con #ad30a8
 set $text #f0eeea
 set $bor #40a3e0
 
-# class                 border  bg    text    indic.  child_border
-client.focused          $bor    $tbg  $text   $con    $bor
-client.focused_inactive $bg     $tbg  $text   #32302d $bg
-client.unfocused        $bg     $tbg  $text   #22201d $bg
+# class                 border  bg    text    indic. child_border
+client.focused          $bor    $tbg  $text   $con   $bor
+client.focused_inactive $bg     $tbg  $text   $bg    $bg
+client.unfocused        $bg     $tbg  $text   $bg    $bg
 client.background #00000000
 
 ## Workspaces
 # simple formatting options
 #set $w0 <span color=\"#888\"><b>1: </b></span>
-set $w1 ""
-set $w2 ""
+set $w1 ""
+set $w2 ""
 set $w3 "<b>3</b>"
 set $w4 "<b>4</b>"
 set $w5 ""
-set $w6 ""
+set $w6 "6"
 set $w7 ""
-set $w8 ""
+set $w8 ""
 set $w9 ""
 
 workspace $w9 gaps inner 0
 hide_edge_borders smart
 smart_gaps on
 
+assign [app_id="firefox.*"] $w1
+assign [class="NetBeans"] $w5
+assign [app_id="Gimp|Inkscape"] $w7
+assign [title=".*LibreOffice.*|Soffice"] $w7
+assign [app_id="thunderbird|tutanota-desktop"] $w8
 assign [title="^Minecraft.? 1\.[1-2][0-9][0-9.]*$"] $w9
 assign [class=".*.exe"] $w9
 assign [class="[sS]team.*"] $w9
-assign [app_id="firefox.*"] $w8
-assign [app_id="vlc|mpv|Gimp|Inkscape"] $w7
-assign [title=".*LibreOffice.*|Soffice"] $w6
-assign [app_id="thunderbird|tutanota-desktop"] $w6
-assign [class="NetBeans"] $w5
 
 # Outputs
 set $USBC DP-1
 set $HDMI HDMI-A-1
 output $display pos 0,0
-output $USBC mode 3840x2160@60Hz scale 2
 output $HDMI adaptive_sync on scale 2
 
 workspace $w1 output $display
-workspace $w2 output $display
-workspace $w3 output $HDMI
+workspace $w2 output $HDMI
+workspace $w3 output $USBC
 workspace $w4 output $USBC
-workspace $w5 output $display
-workspace $w6 output $display
 workspace $w7 output $HDMI
-workspace $w8 output $HDMI
 workspace $w9 output $HDMI
 
 ## Statusbar setup

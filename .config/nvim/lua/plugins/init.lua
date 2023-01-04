@@ -3,7 +3,7 @@ packer.init {disable_commands = true}
 local use = packer.use
 packer.reset()
 
-vim.keymap.set("n", "<Leader>u", "<NOP>")
+map("n", "<Leader>u", "<NOP>")
 -- Packer can manage itself as an optional plugin
 use {"wbthomason/packer.nvim", config = [[require'plugins'.sync()]], keys = {{"n", "<Leader>u"}}}
 
@@ -21,22 +21,22 @@ use {
 	end,
 }
 use {"kyazdani42/nvim-web-devicons", after = "nerdcontrast.nvim"}
-use {"goolord/alpha-nvim", config = [[require "alpha-s"]], after = "nerdcontrast.nvim"}
-use {"feline-nvim/feline.nvim", config = [[require "feline-s"]], after = "nerdcontrast.nvim"}
-use {"romgrk/barbar.nvim", config = [[require "barbar-s"]], event = "User Initialized"}
+use {"goolord/alpha-nvim", config = [[require "plugins.alpha"]], after = "nerdcontrast.nvim"}
+use {"feline-nvim/feline.nvim", config = [[require "plugins.feline"]], after = "nerdcontrast.nvim"}
+use {"romgrk/barbar.nvim", config = [[require "plugins.barbar"]], event = "User Initialized"}
 -- Explorer
-use {"kevinhwang91/rnvimr", config = [[require "rnvimr-s"]]}
+use {"kevinhwang91/rnvimr", config = [[require "plugins.rnvimr"]]}
 use {
 	"kyazdani42/nvim-tree.lua",
-	config = [[require "nvimtree-s"]],
+	config = [[require "plugins.nvimtree"]],
 	keys = {{"n", "E"}, {"n", "<M-Tab>"}},
 }
-use {"ibhagwan/fzf-lua", event = "User Initialized", config = [[require "fzf-s"]]}
+use {"ibhagwan/fzf-lua", event = "User Initialized", config = [[require "plugins.fzf"]]}
 
 -- Autocomplete
 use {
 	"hrsh7th/nvim-cmp",
-	config = [[require "cmp-s"]],
+	config = [[require "plugins.cmp"]],
 	event = "InsertEnter",
 	requires = {
 		{"L3MON4D3/LuaSnip", event = "User Initialized"},
@@ -49,10 +49,10 @@ use {
 		{after = "nvim-cmp", "hrsh7th/cmp-emoji"},
 		{after = "nvim-cmp", "hrsh7th/cmp-buffer"},
 		{after = "nvim-cmp", "kdheepak/cmp-latex-symbols"},
-		{after = "nvim-cmp", "windwp/nvim-autopairs", config = [[require "autopairs-s"]]},
+		{after = "nvim-cmp", "windwp/nvim-autopairs", config = [[require "plugins.autopairs"]]},
 	},
 }
-use {"folke/neodev.nvim", config = [[require 'lsp'(require 'lsp.lua-ls'())]], ft = "lua"}
+use {"folke/neodev.nvim", config = [[require 'lsp'("sumneko_lua")]], ft = "lua"}
 use {"mfussenegger/nvim-jdtls", config = [[require "lsp.jdtls"]], ft = "java"}
 use {"neovim/nvim-lspconfig", config = [[require "lsp"]], after = "cmp-nvim-lsp"}
 use {
@@ -65,7 +65,7 @@ use {
 	config = [[
 		local ng = require "neogen"
 		ng.setup {snippet_engine = "luasnip"}
-		vim.keymap.set({"n", "i"}, "<M-y>", ng.generate)
+		map({"n", "i"}, "<M-y>", ng.generate)
 	]],
 	after = "nvim-treesitter",
 }
@@ -79,7 +79,7 @@ use {
 -- Debugging
 use {
 	"rcarriga/nvim-dap-ui",
-	config = [[require "dap-s"]],
+	config = [[require "plugins.dap"]],
 	after = "nvim-dap",
 	requires = {"mfussenegger/nvim-dap", ft = {"c", "cpp", "rust", "java"}},
 }
@@ -87,11 +87,11 @@ use {
 use {
 	"nvim-treesitter/nvim-treesitter",
 	run = ":TSUpdate",
-	config = [[require "treesitter-s"]],
+	config = [[require "plugins.treesitter"]],
 	requires = {"windwp/nvim-ts-autotag", after = "nvim-treesitter"},
 	event = "User Initialized",
 }
--- use {"nvim-treesitter/playground", config = [[require "playground-s"]], after = "nvim-treesitter"}
+-- use {"nvim-treesitter/playground", config = [[require "plugins.playground"]], after = "nvim-treesitter"}
 use {"JosefLitos/vim-i3config", event = "User Initialized"}
 
 -- Nice To Have
@@ -101,8 +101,8 @@ use {
 	event = "User Initialized",
 }
 use {"pierreglaser/folding-nvim", event = "User Initialized"}
-use {"numToStr/Comment.nvim", config = [[require "comment-s"]], event = "User Initialized"}
-use {"rrethy/vim-hexokinase", run = "make hexokinase", config = [[require "hexokinase-s"]]}
+use {"numToStr/Comment.nvim", config = [[require "plugins.comment"]], event = "User Initialized"}
+use {"rrethy/vim-hexokinase", run = "make hexokinase", config = [[require "plugins.hexokinase"]]}
 use "LunarVim/bigfile.nvim"
 -- use {'lewis6991/gitsigns.nvim', config = [[require('gitsigns').setup()]]}
 --[[ use {

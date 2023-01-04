@@ -1,5 +1,4 @@
 require'Comment'.setup {ignore = '^$', padding = true, mappings = {basic = true, extra = false}}
-local map = vim.keymap.set
 map("n", "<C-S-C>", "gcc", {remap = true, silent = true})
 map("v", "<C-S-C>", "gc", {remap = true, silent = true})
 map("i", "<C-S-C>", "<Esc>gcca", {remap = true, silent = true})

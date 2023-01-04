@@ -2,7 +2,7 @@
 	border: 2px solid #77dd22 !important;
 }
 .tab-background:not([selected]) {
-	background: #88888866 !important;
+	background: #88888855 !important;
 }
 
 .tab-background[selected],

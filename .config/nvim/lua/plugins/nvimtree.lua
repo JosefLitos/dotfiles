@@ -21,7 +21,7 @@ require'nvim-tree'.setup {
 	},
 	actions = {open_file = {quit_on_open = true, window_picker = {enable = false}}},
 	on_attach = function(bufnr)
-		local function map(key, fn) vim.keymap.set("n", key, function() exec(fn) end, {buffer = bufnr}) end
+		local function map(key, fn) _G.map("n", key, function() exec(fn) end, {buffer = bufnr}) end
 		map("h", "dir_up")
 		map("<Left>", "dir_up")
 		map("l", "edit")
@@ -46,11 +46,11 @@ require'nvim-tree'.setup {
 		map("cd", "cd")
 		map("O", "cd")
 		map("<S-CR>", "cd")
-		vim.keymap.set("n", "<M-Tab>", vim.api.nvim_replace_termcodes("<C-w><C-l>", true, true, true),
+		_G.map("n", "<M-Tab>", vim.api.nvim_replace_termcodes("<C-w><C-l>", true, true, true),
 				{buffer = bufnr})
 	end,
 	remove_keymaps = true,
 }
 
-vim.keymap.set("n", "E", "<Cmd>NvimTreeToggle<CR>")
-vim.keymap.set("n", "<M-Tab>", "<Cmd>NvimTreeFocus<CR>")
+map("n", "E", "<Cmd>NvimTreeToggle<CR>")
+map("n", "<M-Tab>", "<Cmd>NvimTreeFocus<CR>")

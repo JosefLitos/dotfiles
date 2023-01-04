@@ -26,10 +26,10 @@ vim.lsp.handlers["textDocument/definition"] = fzf.lsp_definitions
 vim.lsp.handlers["textDocument/references"] = fzf.lsp_references
 vim.lsp.handlers["textDocument/implementation"] = fzf.lsp_implementation
 
-vim.keymap.set("n", "<Leader>s",
+map("n", "<Leader>s",
 		function() fzf.files({cwd = vim.api.nvim_buf_get_name(0):gsub("[^/]+$", "")}) end)
-vim.keymap.set("n", "<Leader>f", fzf.files)
-vim.keymap.set("n", "<Leader>o", fzf.oldfiles)
-vim.keymap.set("n", "<Leader>g", fzf.live_grep)
-vim.keymap.set("n", "<Leader>d", fzf.lsp_workspace_diagnostics)
-vim.keymap.set("n", "<Leader>c", fzf.highlights)
+map("n", "<Leader>f", fzf.files)
+map("n", "<Leader>o", fzf.oldfiles)
+map("n", "<Leader>g", fzf.live_grep)
+map("n", "<Leader>d", fzf.lsp_workspace_diagnostics)
+map("n", "<Leader>c", fzf.highlights)

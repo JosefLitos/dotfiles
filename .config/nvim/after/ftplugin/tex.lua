@@ -12,7 +12,6 @@ local function enter_or_item()
 	end
 end
 
-local map = vim.keymap.set
 map("i", "<CR>", enter_or_item, {buffer = true, expr = true})
 map("i", "<S-Space>", "\\,\\,", {buffer = true})
 map("i", ",,", "\\,\\,", {buffer = true})

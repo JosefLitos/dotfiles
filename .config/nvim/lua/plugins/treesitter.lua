@@ -36,7 +36,7 @@ set foldexpr=nvim_treesitter#foldexpr()
 ]]
 
 -- Treesitter Debugging
-vim.keymap.set("n", "<M-t>", function()
+map("n", "<M-t>", function()
 	local res = vim.treesitter.get_captures_at_cursor(0)
 	local str = {}
 	for _, v in ipairs(res) do

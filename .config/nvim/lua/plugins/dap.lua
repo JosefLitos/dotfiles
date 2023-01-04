@@ -105,7 +105,6 @@ dapui.setup({
 	},
 })
 
-local map = vim.keymap.set
 map("n", "<Leader>b", dap.toggle_breakpoint)
 map("n", "<Leader>C", dap.clear_breakpoints)
 map("n", "<Leader>G", dap.goto_)

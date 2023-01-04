@@ -22,13 +22,13 @@ bindsym $Mod+r exec rofi -show drun
 
 # quick app starter
 bindsym $Mod+Return exec term
-bindsym $Mod+1 exec W=$w8 lof "MOZ_ENABLE_WAYLAND=1 firefox-nightly" firefox-nightly
+bindsym $Mod+1 exec W=$w1 lof "MOZ_ENABLE_WAYLAND=1 firefox-nightly" firefox-nightly
 bindsym $Mod+2 exec foot -dnone nvim
 bindsym $Mod+3 exec term
 bindsym $Mod+4 exec lof ripcord Ripcord
 bindsym $Mod+5 exec W=$w5 lof netbeans NetBeans
 bindsym $Mod+7 exec W=$w7 lof gimp Gimp
-bindsym $Mod+8 exec W=$w6 lof "MOZ_ENABLE_WAYLAND=1 thunderbird" thunderbird
+bindsym $Mod+8 exec W=$w8 lof "MOZ_ENABLE_WAYLAND=1 thunderbird" thunderbird
 bindsym $Mod+9 exec W=$w9 lof prismlauncher null "^Minecraft.*"
 bindsym $Mod+e exec term ranger
 bindsym $Mod+$Alt+e exec pcmanfm

@@ -56,7 +56,7 @@ wtwitch() {
 	done
 }
 
-streamerList=(iskall85 tangotek mrgregles goodtimeswithscar skizzleman renthedogtv)
+streamerList=(iskall85 tangotek skizzleman mrgregles goodtimeswithscar anderzel renthedogtv)
 streamer=$(printf '%s\n' ${streamerList[@]} | dmenu -p Streamer)
 echo "$streamer"
 if [[ -z $streamer ]]; then
@@ -110,13 +110,13 @@ if [[ -z $quality ]]; then
 	fi
 
 	case "$quality" in
-		best) quality="b[height=1080]+" ;;
-		medium) quality="b[height=720]+" ;;
-		low) quality="b[height=480]+" ;;
-		worst) quality="b[height=360]+" ;;
-		audio) quality="" ;;
+		best) quality="" ;;
+		medium) quality="b[height=720]+ba" ;;
+		low) quality="b[height=480]+ba" ;;
+		worst) quality="b[height=360]+ba" ;;
+		audio) quality="ba" ;;
 	esac
 fi
 
-mpv --ytdl-format="${quality}ba" --vo=dmabuf-wayland $url > /dev/null 2>&1 &
+mpv --ytdl-format=$quality --vo=dmabuf-wayland $url > /dev/null 2>&1 &
 disown

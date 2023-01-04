@@ -105,20 +105,13 @@ local schemas = {
 		url = "https://json.schemastore.org/package.json",
 	},
 	{
-		description = "JSON schema for Visual Studio component configuration files",
-		fileMatch = {"*.vsconfig"},
-		url = "https://json.schemastore.org/vsconfig.json",
-	},
-	{
 		description = "Resume json",
 		fileMatch = {"resume.json"},
 		url = "https://raw.githubusercontent.com/jsonresume/resume-schema/v1.0.0/schema.json",
 	},
 }
 
-return function()
-	return "jsonls", {
-		cmd = {"vscode-json-language-server", "--stdio"},
-		settings = {json = {schemas = schemas}, documentFormatting = false},
-	}
-end
+return {
+	cmd = {"vscode-json-language-server", "--stdio"},
+	settings = {json = {schemas = schemas}, documentFormatting = false},
+}

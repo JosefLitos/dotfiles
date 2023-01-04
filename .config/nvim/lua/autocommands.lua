@@ -48,5 +48,6 @@ augroup _general_settings
 	au TextYankPost * lua require'vim.highlight'.on_yank{higroup = 'Search', timeout = 40}
 	au FileType qf,help,man,lspinfo nnoremap <silent> <buffer> q :close<CR>
 	au BufRead *.json5 setlocal ft=json
+	au BufRead *.c setlocal ft=cpp
 augroup end
 ]]

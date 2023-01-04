@@ -7,7 +7,6 @@ require'bufferline'.setup {
 	icon_separator_active = '▊',
 }
 
-local map = vim.keymap.set
 -- Moving between
 map("n", "<M-S-,>", "<Cmd>BufferMovePrevious<CR>")
 map("n", "<M-S-.>", "<Cmd>BufferMoveNext<CR>")
