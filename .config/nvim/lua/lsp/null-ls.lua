@@ -54,7 +54,7 @@ AllowShortFunctionsOnASingleLine: "None",
 BreakBeforeBraces: "Attach",
 AlignOperands: "DontAlign",
 IndentCaseBlocks: false,
-IndentCaseLabels: false,
+IndentCaseLabels: true,
 SortJavaStaticImport: "After",
 SpaceAfterCStyleCast: true,
 JavaImportGroups: [ "java" ]

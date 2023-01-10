@@ -14,7 +14,7 @@ else
 end
 
 vim.api.nvim_create_autocmd("BufWritePost", {
-	pattern = "plugins.lua",
+	pattern = "plugins/init.lua",
 	callback = function()
 		package.loaded.plugins = nil
 		require'plugins'.sync()
@@ -34,7 +34,7 @@ vim.api.nvim_create_autocmd("BufEnter", {
 	callback = function(state)
 		local clients = vim.lsp.get_active_clients({bufnr = state.buf})
 		for _, client in ipairs(clients) do
-			if client.name ~= "null-ls" then
+			if client.name ~= "null-ls" and client.config.root_dir ~= nil then
 				vim.api.nvim_set_current_dir(client.config.root_dir)
 				return
 			end
@@ -47,7 +47,7 @@ augroup _general_settings
 	au!
 	au TextYankPost * lua require'vim.highlight'.on_yank{higroup = 'Search', timeout = 40}
 	au FileType qf,help,man,lspinfo nnoremap <silent> <buffer> q :close<CR>
-	au BufRead *.json5 setlocal ft=json
-	au BufRead *.c setlocal ft=cpp
+	au BufEnter *.json5 setlocal ft=json
+	au TermOpen * setlocal nonu scrollback=100
 augroup end
 ]]

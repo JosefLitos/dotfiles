@@ -7,6 +7,8 @@ vim.diagnostic.config {
 	float = {focusable = false, border = "rounded", source = "always"},
 }
 vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {border = "rounded"})
+vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help,
+		{border = "rounded"})
 
 local capabilities = require'cmp_nvim_lsp'.default_capabilities()
 local lsc = require "lspconfig"
@@ -56,6 +58,8 @@ setup "texlab"
 -- setup "jsonls"
 -- setup("yamlls", {})
 
+vim.api.nvim_exec_autocmds("User", {pattern = "LspInit", data = setup})
+
 -- Lsp diagnostic
 map({"n", "i"}, "<M-d>", vim.diagnostic.open_float)
 map({"n", "i"}, "<M-N>", vim.diagnostic.goto_prev)
@@ -68,11 +72,9 @@ map("n", "gi", vim.lsp.buf.implementation)
 map({"n", "i"}, "<M-i>", vim.lsp.buf.hover)
 map({"n", "i"}, "<M-h>", vim.lsp.buf.document_highlight)
 map({"n", "i"}, "<M-H>", vim.lsp.buf.clear_references)
-map("n", "ca", vim.lsp.buf.code_action)
-map("i", "<M-c>", vim.lsp.buf.code_action)
+map({"n", "i"}, "<M-c>", vim.lsp.buf.code_action)
 map({"n", "i"}, "<C-r>", vim.lsp.buf.rename)
 map({"n", "i"}, "<F2>", vim.lsp.buf.rename)
-
 map({"n", "i"}, "<M-g>", function()
 	for _, s in ipairs(vim.lsp.get_active_clients({bufnr = 0})) do
 		if s.server_capabilities.definitionProvider and s.name ~= "bashls" then
@@ -89,7 +91,6 @@ map({"n", "i"}, "<M-g>", function()
 	vim.cmd('e ' .. path:gsub('~', os.getenv('HOME')))
 	vim.loop.chdir(cwd)
 end)
-
 map({"n", "i"}, "<M-F>", function()
 	vim.lsp.buf.format({
 		tabSize = vim.bo.tabstop,
@@ -99,7 +100,5 @@ map({"n", "i"}, "<M-F>", function()
 		async = true,
 	})
 end)
-
-require "ui"
 
 return setup

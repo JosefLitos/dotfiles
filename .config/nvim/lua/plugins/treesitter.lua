@@ -2,6 +2,7 @@ require'nvim-treesitter.configs'.setup {
 	ensure_installed = {
 		"bash",
 		"bibtex",
+		"c",
 		"cpp",
 		"css",
 		"html",

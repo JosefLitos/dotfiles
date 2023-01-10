@@ -58,7 +58,6 @@ wtwitch() {
 
 streamerList=(iskall85 tangotek skizzleman mrgregles goodtimeswithscar anderzel renthedogtv)
 streamer=$(printf '%s\n' ${streamerList[@]} | dmenu -p Streamer)
-echo "$streamer"
 if [[ -z $streamer ]]; then
 	exit 0
 elif [[ $streamer == [0-9] ]]; then
@@ -73,7 +72,7 @@ elif [[ $streamer == [a-z] ]]; then
 	[[ $streamer == [a-z] ]] && exit 1
 elif [[ $streamer == https://* ]]; then
 	url=$streamer
-	quality="bv+"
+	quality="bv+ba"
 fi
 
 if [[ -z $url ]]; then

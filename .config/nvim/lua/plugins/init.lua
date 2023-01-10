@@ -52,7 +52,7 @@ use {
 		{after = "nvim-cmp", "windwp/nvim-autopairs", config = [[require "plugins.autopairs"]]},
 	},
 }
-use {"folke/neodev.nvim", config = [[require 'lsp'("sumneko_lua")]], ft = "lua"}
+use {"folke/neodev.nvim", config = [[require "plugins.neodev"]], ft = "lua"}
 use {"mfussenegger/nvim-jdtls", config = [[require "lsp.jdtls"]], ft = "java"}
 use {"neovim/nvim-lspconfig", config = [[require "lsp"]], after = "cmp-nvim-lsp"}
 use {
@@ -93,6 +93,12 @@ use {
 }
 -- use {"nvim-treesitter/playground", config = [[require "plugins.playground"]], after = "nvim-treesitter"}
 use {"JosefLitos/vim-i3config", event = "User Initialized"}
+use {
+	"JosefLitos/reform.nvim",
+	config = [[require'reform'.setup()]],
+	run = "gcc -I /usr/include/lua5.3 ./lua/reform/docfmt/main.c -fPIC -O2 -shared -o ./lua/reform/docfmt/main.so",
+	event = "User Initialized",
+}
 
 -- Nice To Have
 use {

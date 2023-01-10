@@ -12,7 +12,7 @@ dap.adapters.codelldb = {
 		args = {"--port", "${port}"},
 	},
 }
-dap.configurations.cpp = {
+dap.configurations.c = {
 	{
 		name = "Launch",
 		type = "codelldb",
@@ -20,12 +20,9 @@ dap.configurations.cpp = {
 		cwd = '${workspaceFolder}',
 		program = function()
 			local name = vim.api.nvim_buf_get_name(0)
-			local exec = name:gsub("%.c", ".out")
+			local exec = name:gsub("%.[ch].*$", ".out")
 			-- LSAN_OPTIONS=verbosity=1:log_threads=1 gdb...
-			local f = io.open(name, "r")
-			if f == nil then
-				io.close(f)
-			else
+			if not vim.loop.fs_stat(name) then
 				os.execute("g++ -std=c++17 -Wall -pedantic -g -fsanitize=address,leak " .. name .. " -o " ..
 						           exec)
 			end
@@ -33,7 +30,7 @@ dap.configurations.cpp = {
 		end,
 	},
 }
-dap.configurations.c = dap.configurations.cpp
+dap.configurations.cpp = dap.configurations.c
 dap.configurations.rust = {
 	{
 		name = "Launch",

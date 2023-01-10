@@ -13,7 +13,6 @@ vim.g.rnvimr_layout = {
 }
 
 -- Rnvimr yw: current dir to Neovim's cwd; gw: goto Neovim's cwd
-map("n", "<C-o>", "<Cmd>RnvimrToggle<CR>")
 map("n", "R", "<Cmd>RnvimrToggle<CR>")
 
 vim.api.nvim_create_autocmd("FileType", {

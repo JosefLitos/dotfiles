@@ -27,4 +27,6 @@ map("i", "<M-u>", "\\underline{}<left>", {buffer = true})
 map({"n", "i"}, "<M-D>",
 		'<Cmd>!set x (compiler "%:p"); if not pgrep -f "zathura $x"; zathura "$x" &; end<CR>',
 		{buffer = true})
-map({"n", "i"}, "<M-r>", "<C-s><M-D><CR>", {buffer = true, remap = true})
+map({"n", "i"}, "<M-r>",
+		'<Cmd>w|!set x (compiler "%:p"); if not pgrep -f "zathura $x"; zathura "$x" &; end<CR><CR>',
+		{buffer = true})

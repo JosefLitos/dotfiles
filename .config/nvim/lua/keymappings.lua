@@ -127,7 +127,7 @@ map("n", "<C-S-L>", "<C-w>l")
 map("i", "<C-S-L>", "<C-o><C-w>l")
 map("t", "<C-S-L>", "<C-\\><C-o><C-w>l")
 
-map("n", "S", "<Cmd>term<CR><Cmd>setlocal nonu scrollback=100<CR>i")
+map("n", "S", "<Cmd>term<CR>a")
 map("n", "cd", "<Cmd>cd %:h<CR>")
 
 -- Refresh and reload
